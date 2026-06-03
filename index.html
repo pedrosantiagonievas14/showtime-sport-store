@@ -604,7 +604,7 @@ footer{background:var(--ink);color:var(--cream);margin-top:2rem;}
     <div class="toolbar-inner">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="searchZapas" placeholder="Buscar modelo..." autocomplete="off">
+        <input type="text" class="search-input" id="searchZapas" placeholder="Buscar modelo o marca..." autocomplete="off">
         <button class="search-clear" id="clearZapas" onclick="clearSearch('zapas')">✕</button>
       </div>
       <div class="cat-scroll"><div class="cat-row" id="catRowZapas"></div></div>
@@ -874,19 +874,10 @@ function getUniqueBrands(products){
   return Object.keys(map).sort().map(k=>map[k]);
 }
 
-function searchProducts() {
-  const query = document.querySelector(".search-input")?.value.toLowerCase().trim() || "";
-  if (!query) {
-    renderGridZapas();
-    return;
-  }
-  const results = zapas.filter(p => {
-    const nombre = p.nombre.toLowerCase();
-    const marca = (p.marca || "").toLowerCase();
-    const deporte = (p.section || "").toLowerCase();
-    return nombre.includes(query) || marca.includes(query) || deporte.includes(query);
-  });
-  renderCustomGrid(results, `Resultados: "${query}"`);
+function searchProducts(){
+  const el=document.querySelector('.search-input');
+  currentSearchZapas = el ? el.value.trim() : '';
+  renderGridZapas();
 }
 
 function renderCustomGrid(products, titulo) {
@@ -960,32 +951,22 @@ function renderCustomGrid(products, titulo) {
 
 function renderGridZapas() {
   let products = zapas.filter(p=>p.visible!==false);
-  if (activeFilters.category) {
-    products = products.filter(p => p.section === activeFilters.category);
-  }
-  if (activeFilters.brand) {
-    products = products.filter(p => (p.marca||'').toLowerCase() === activeFilters.brand);
-  }
-  if (activeFilters.usaSize) {
-    products = products.filter(p => Array.isArray(p.talles) && p.talles.some(t => String(t).replace(/us/i,'').trim() === activeFilters.usaSize));
-  }
+  const cat = currentCatZapas || 'all';
+  if(cat==='stock') products=products.filter(p=>p.section==='stock');
+  else if(cat==='pedido') products=products.filter(p=>p.section==='pedido');
+  else if(cat.indexOf('brand:')===0){ const b=cat.slice(6).toLowerCase(); products=products.filter(p=>(p.marca||'').toLowerCase()===b); }
+  if(currentSizeZapas) products=products.filter(p=>Array.isArray(p.talles)&&p.talles.some(t=>String(t).replace(/us/i,'').trim()===currentSizeZapas));
+  if(currentSearchZapas){ const q=currentSearchZapas.toLowerCase(); products=products.filter(p=>(p.nombre||'').toLowerCase().includes(q)||(p.marca||'').toLowerCase().includes(q)); }
   renderCustomGrid(products, "Zapas de Stock");
-  updateCategoryRow(zapas);
-  updateBrandFilters(zapas);
-  updateUSASizeFilter(zapas);
+  renderSizeRowZapas();
 }
 
 function renderGridLocal() {
   let products = (productosLocal||[]).filter(p=>p.visible!==false);
-  if (activeFilters.category) {
-    products = products.filter(p => p.categoria === activeFilters.category);
-  }
-  if (activeFilters.brand) {
-    products = products.filter(p => (p.marca||'').toLowerCase() === activeFilters.brand);
-  }
+  const cat = currentCatLocal || 'all';
+  if(cat!=='all') products=products.filter(p=>p.categoria===cat);
+  if(currentSearchLocal){ const q=currentSearchLocal.toLowerCase(); products=products.filter(p=>(p.nombre||'').toLowerCase().includes(q)); }
   renderCustomGrid(products, "Local");
-  updateCategoryRowLocal(productosLocal);
-  updateBrandFiltersLocal(productosLocal);
 }
 
 function updateCategoryRow(products) {
@@ -1194,19 +1175,35 @@ function renderGridLocal(){
   }).join('');
 }
 
-let currentCatZapas='all', currentSearchZapas='';
+let currentCatZapas='all', currentSearchZapas='', currentSizeZapas='';
+function renderSizeRowZapas(){
+  const catRow=document.getElementById('catRowZapas'); if(!catRow) return;
+  let row=document.getElementById('sizeRowZapas');
+  if(!row){ row=document.createElement('div'); row.id='sizeRowZapas'; row.className=catRow.className; row.style.marginTop='0.55rem'; catRow.parentNode.insertBefore(row, catRow.nextSibling); }
+  const sizes=new Set();
+  zapas.filter(p=>p.visible!==false).forEach(p=>{ if(Array.isArray(p.talles)) p.talles.forEach(t=>{ t=String(t); if(/us/i.test(t)){ const s=t.replace(/us/i,'').trim(); if(s) sizes.add(s);} }); });
+  const list=Array.from(sizes).sort((a,b)=>parseFloat(a)-parseFloat(b));
+  if(!list.length){ row.innerHTML=''; return; }
+  row.innerHTML='';
+  const mk=(k,l)=>{ const b=document.createElement('button'); b.className='cat-btn'+(currentSizeZapas===k?' active':''); b.dataset.size=k; b.innerHTML=l; row.appendChild(b); };
+  mk('', 'Talle: Todos'); list.forEach(s=>mk(s, s+' US'));
+  row.querySelectorAll('.cat-btn').forEach(b=>b.addEventListener('click',()=>{ currentSizeZapas=b.dataset.size; renderGridZapas(); }));
+}
 function renderCatRowZapas(){
   const row=document.getElementById('catRowZapas');
-  const stockN=zapas.filter(z=>z.section==='stock').length, pedN=zapas.filter(z=>z.section==='pedido').length;
-  const brands={}; zapas.forEach(z=>brands[z.marca]=(brands[z.marca]||0)+1);
-  const btns=[{k:'all',l:'Todas',c:zapas.length},{k:'stock',l:'★ Stock',c:stockN},{k:'pedido',l:'Pedido USA',c:pedN}];
-  Object.keys(brands).forEach(b=>btns.push({k:'brand:'+b,l:b,c:brands[b]}));
+  const vis=zapas.filter(z=>z.visible!==false);
+  const stockN=vis.filter(z=>z.section==='stock').length, pedN=vis.filter(z=>z.section==='pedido').length;
+  const brands={}; vis.forEach(z=>{ if(z.marca&&String(z.marca).trim()){ const k=String(z.marca).trim().toLowerCase(); if(!brands[k]) brands[k]={label:String(z.marca).trim(),c:0}; brands[k].c++; } });
+  const btns=[{k:'all',l:'Todas',c:vis.length},{k:'stock',l:'\u2605 Stock',c:stockN},{k:'pedido',l:'Pedido USA',c:pedN}];
+  Object.keys(brands).sort().forEach(k=>btns.push({k:'brand:'+brands[k].label,l:brands[k].label.toUpperCase(),c:brands[k].c}));
   row.innerHTML='';
-  btns.forEach((b,i)=>{ const el=document.createElement('button'); el.className='cat-btn'+(i===0?' active':''); el.dataset.cat=b.k; el.innerHTML=`${b.l} <span class="count">${b.c}</span>`; row.appendChild(el); });
+  btns.forEach((b)=>{ const el=document.createElement('button'); el.className='cat-btn'+(currentCatZapas===b.k?' active':''); el.dataset.cat=b.k; el.innerHTML=`${b.l} <span class="count">${b.c}</span>`; row.appendChild(el); });
   row.querySelectorAll('.cat-btn').forEach(b=>b.addEventListener('click',()=>{
+    currentCatZapas=b.dataset.cat;
     row.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-    currentCatZapas=b.dataset.cat; renderGridZapas();
+    renderGridZapas();
   }));
+  renderSizeRowZapas();
 }
 function filterZapas(){
   const q=currentSearchZapas.toLowerCase().trim();
