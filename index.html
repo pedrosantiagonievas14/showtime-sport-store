@@ -6,6 +6,21 @@
 <meta name="theme-color" content="#F2EDE4">
 <title>SHOWTIME Sport Store · Bahía Blanca</title>
 <meta name="description" content="Showtime Sport Store — Indumentaria deportiva, zapatillas y confección de uniformes en Bahía Blanca. Tu aliado deportivo.">
+<link rel="canonical" href="https://pedrosantiagonievas14.github.io/showtime-sport-store/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Showtime Sport Store">
+<meta property="og:title" content="SHOWTIME Sport Store · Bahía Blanca">
+<meta property="og:description" content="Indumentaria deportiva, zapatillas y confección de uniformes para clubes en Bahía Blanca. 2 locales. Envíos a todo el país.">
+<meta property="og:url" content="https://pedrosantiagonievas14.github.io/showtime-sport-store/">
+<meta property="og:image" content="https://pedrosantiagonievas14.github.io/showtime-sport-store/og-showtime.jpg">
+<meta property="og:locale" content="es_AR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SHOWTIME Sport Store · Bahía Blanca">
+<meta name="twitter:description" content="Indumentaria deportiva, zapatillas y confección para clubes en Bahía Blanca.">
+<meta name="twitter:image" content="https://pedrosantiagonievas14.github.io/showtime-sport-store/og-showtime.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SportingGoodsStore","name":"Showtime Sport Store","description":"Indumentaria deportiva, zapatillas y confección de uniformes para clubes en Bahía Blanca.","url":"https://pedrosantiagonievas14.github.io/showtime-sport-store/","image":"https://pedrosantiagonievas14.github.io/showtime-sport-store/og-showtime.jpg","areaServed":"Bahía Blanca, Argentina","sameAs":["https://www.instagram.com/showtimesportstore"],"department":[{"@type":"SportingGoodsStore","name":"Showtime - Local Centro","address":{"@type":"PostalAddress","streetAddress":"Brown 153","addressLocality":"Bahía Blanca","addressRegion":"Buenos Aires","addressCountry":"AR"},"telephone":"+5492915773382"},{"@type":"SportingGoodsStore","name":"Showtime - Local Villa Mitre","address":{"@type":"PostalAddress","streetAddress":"Garibaldi 243","addressLocality":"Bahía Blanca","addressRegion":"Buenos Aires","addressCountry":"AR"},"telephone":"+5492915709281"}]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&family=Playfair+Display:ital,wght@0,600;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -33,6 +48,8 @@ button{font-family:inherit;cursor:pointer;}
 img{display:block;max-width:100%;}
 
 ::selection{background:var(--orange);color:var(--cream);}
+.card.agotado .card-cta{opacity:.5;pointer-events:none;}
+.card.agotado .card-img{filter:grayscale(.55);}
 
 /* ━━━ MARQUEE TOP ━━━ */
 .marquee{background:var(--ink);color:var(--cream);overflow:hidden;white-space:nowrap;padding:0.5rem 0;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;}
@@ -796,46 +813,38 @@ const WA_MITRE = '5492915709281';
 
 const DEFAULT_LOCAL = [{"nombre": "BUCALES", "marca": "", "categoria": "ACCESORIOS", "deporte": "Accesorios", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_879479-MLA109711166430_042026-F.webp", "talles": ["JUNIORS"], "precio": "", "oferta": false}, {"nombre": "CUELLITOS TERMICOS", "marca": "", "categoria": "ACCESORIOS", "deporte": "Multideporte", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_967069-MLA50265314283_062022-F.webp", "talles": ["NEGRO"], "precio": "", "oferta": false}, {"nombre": "INFLADOR", "marca": "", "categoria": "ACCESORIOS", "deporte": "Accesorios", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_720922-MLU76211676136_052024-F.webp", "talles": ["-"], "precio": "", "oferta": false}, {"nombre": "MEDIAS ANTIDESLIZANTES", "marca": "SPORT", "categoria": "ACCESORIOS", "deporte": "Fútbol", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_928199-MLA77852367532_072024-F.webp", "talles": ["39-42"], "precio": "", "oferta": false}, {"nombre": "MOCHILAS", "marca": "", "categoria": "ACCESORIOS", "deporte": "Mochilas y Bolsos", "img": "https://i.pinimg.com/1200x/13/39/be/1339beb0a6d9ab86b2bf967e9e863ea1.jpg", "talles": ["-"], "precio": "", "oferta": false}, {"nombre": "OJOTAS FAJA PUMA-ADIDAS", "marca": "", "categoria": "ACCESORIOS", "deporte": "Multideporte", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_717633-MLA110676795280_052026-F.webp", "talles": ["27-28", "29-30", "33-34", "35-36", "37-38", "39-40", "41-42", "43-44"], "precio": "", "oferta": false}, {"nombre": "VENDAS", "marca": "", "categoria": "ACCESORIOS", "deporte": "Multideporte", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_626746-MLA77200412156_072024-F.webp", "talles": ["5 CM", "10 CM"], "precio": "", "oferta": false}, {"nombre": "BERMUDA NBA ADULTO", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_645576-MLA111041339631_042026-F.webp", "talles": ["1", "2", "3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "BERMUDA NBA NIÑO", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_645576-MLA111041339631_042026-F.webp", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CALZA 3/4 SELEE", "marca": "SELEE", "categoria": "BASQUET", "deporte": "Multideporte", "img": "https://acdn-us.mitiendanube.com/stores/283/263/products/seele_82-e8ec757ff45fcf24e817611435842721-1024-1024.webp", "talles": ["S", "M", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CALZA CORTA SELEE BLANCA", "marca": "", "categoria": "BASQUET", "deporte": "Multideporte", "img": "https://acdn-us.mitiendanube.com/stores/283/263/products/121-794588bada2322996416824279887430-1024-1024.webp", "talles": ["L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CALZA DUAL HOOP (1 PIERNA)", "marca": "SELEE", "categoria": "BASQUET", "deporte": "Básquet", "img": "https://acdn-us.mitiendanube.com/stores/283/263/products/6-2b90f796b647fc337417588192772825-1024-1024.webp", "talles": ["M", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS NBA ADULTO", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_980647-MLA110388398919_042026-F.webp", "talles": ["1", "2", "3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS NBA NIÑO", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_870329-MLA109460440915_032026-F.webp", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CODERA BASQUET", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "https://acdn-us.mitiendanube.com/stores/283/263/products/manga-proteccion-negra_1-bfd2f33eed308fcd0a17667609500672-1024-1024.webp", "talles": ["S", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "CONJUNTO NBA CHICAGO NIÑO LARGO", "marca": "NIKE", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CONJUNTO NBA WARRIORS NIÑO LARGO", "marca": "NIKE", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CONJUNTOS NBA BULLS NIÑO LARGO", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CONJUNTOS NBA CELTICS NIÑO LARGO", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["8", "10", "12", "16"], "precio": "", "oferta": false}, {"nombre": "MEDIAS NBA ELITE", "marca": "NBA", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["BLANCA", "NEGRA", "VERDE", "TURQUESA", "AZUL", "NEGRA/DORADA"], "precio": "", "oferta": false}, {"nombre": "MEDIAS SEELE BLANCAS", "marca": "SEELE", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["5", "6"], "precio": "", "oferta": false}, {"nombre": "MEDIAS SEELE NEGRAS", "marca": "SEELE", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["5"], "precio": "", "oferta": false}, {"nombre": "RED BASQUET", "marca": "", "categoria": "BASQUET", "deporte": "Básquet", "img": "", "talles": ["-"], "precio": "", "oferta": false}, {"nombre": "BOCINAS AFA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "https://http2.mlstatic.com/D_NQ_NP_2X_889080-MLA110383163215_042026-F.webp", "talles": ["-"], "precio": "", "oferta": false}, {"nombre": "BUZO MEDIO CIERRE  AFA ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "L", "XL", "XXL", "8", "9"], "precio": "", "oferta": false}, {"nombre": "BUZO MEDIO CIERRE AFA NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "BUZO MEDIO CIERRE INDEPENDIENTE ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["M", "XXXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA AFA ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/dcf75679928d4882ad418bc657958610_9366/Camiseta_Titular_Seleccion_Argentina_26_Messi_Blanco_KA8118_01_laydown.jpg", "talles": ["S", "M", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA AFA ARQUERO ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA AFA ARQUERO NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "12", "14"], "precio": "", "oferta": false}, {"nombre": "CAMISETA AFA NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/dcf75679928d4882ad418bc657958610_9366/Camiseta_Titular_Seleccion_Argentina_26_Messi_Blanco_KA8118_01_laydown.jpg", "talles": ["4", "6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETA AFA SUPLENTE ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/c2de31dea56245079410cbcb83619e00_9366/Camiseta_Alternativa_Seleccion_Argentina_26_Negro_JM5905_01_laydown.jpg", "talles": ["S", "M", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA AFA SUPLENTE NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/c2de31dea56245079410cbcb83619e00_9366/Camiseta_Alternativa_Seleccion_Argentina_26_Negro_JM5905_01_laydown.jpg", "talles": ["4", "6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETA BELLA VISTA BLANCA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "16", "S", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA BELLA VISTA NEGRA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["12", "14", "16", "S", "M", "L"], "precio": "", "oferta": false}, {"nombre": "CAMISETA BOCA AZUL ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA BOCA AZUL NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["6", "8", "10", "12", "14", "16", "4"], "precio": "", "oferta": false}, {"nombre": "CAMISETA BOCA BLANCA ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA BOCA BLANCA NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["6", "8", "10", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETA LINIERS", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "16", "S", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA OLIMPO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["10", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RACING ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RACING NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["10", "12", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RIVER BLANCA ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RIVER BLANCA NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["6", "8", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RIVER NEGRA ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Básquet", "img": "", "talles": ["S", "M", "L", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RIVER NEGRA NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETA SANFRAN", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "S", "M", "L"], "precio": "", "oferta": false}, {"nombre": "CAMISETA TIRO NEGRA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "12", "14", "16", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS FUTBOL EUROPEO ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS FUTBOL EUROPEO NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS INDEPENDIENTE NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["4", "6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "CAMPERA BELLA VISTA", "marca": "", "categoria": "FUTBOL", "deporte": "FUTBOL", "img": "", "talles": ["10", "S", "M", "L"], "precio": "", "oferta": false}, {"nombre": "CONJUNTO BEBE AFA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["1", "2", "3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "CONJUNTO BOCA NIÑO FRIZA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8"], "precio": "", "oferta": false}, {"nombre": "CONJUNTO RIVER NIÑO FRIZA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["10", "14"], "precio": "", "oferta": false}, {"nombre": "GUANTES ARQUERO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["4", "5", "6", "7"], "precio": "", "oferta": false}, {"nombre": "JOGGING BELLA VISTA", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["10", "14", "16", "S"], "precio": "", "oferta": false}, {"nombre": "PANTORRILERAS BLANCAS SOX", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["M"], "precio": "", "oferta": false}, {"nombre": "PANTORRILLERAS NEGRAS SPORT", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["L"], "precio": "", "oferta": false}, {"nombre": "SHORT  RIVER ADULTO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["1"], "precio": "", "oferta": false}, {"nombre": "SHORT AFA ADULTO SUPLENTE", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["S", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "SHORT AFA ADULTO TITULAR", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["1", "2", "3", "4"], "precio": "", "oferta": false}, {"nombre": "SHORT AFA NIÑO SUPLENTE", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "16", "4", "6"], "precio": "", "oferta": false}, {"nombre": "SHORT AFA NIÑO TITULAR", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "16", "4"], "precio": "", "oferta": false}, {"nombre": "SHORT AFA PREMATCH", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "14"], "precio": "", "oferta": false}, {"nombre": "SHORT BELLA VISTA BLANCO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "16", "S", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "SHORT BELLA VISTA NEGRO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["12", "14", "16", "S", "M", "L"], "precio": "", "oferta": false}, {"nombre": "SHORT BOCA ADULTO AZUL", "marca": "", "categoria": "FUTBOL", "deporte": "", "img": "", "talles": ["1", "3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "SHORT BOCA AMARILLO NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "", "img": "", "talles": ["4", "6", "16"], "precio": "", "oferta": false}, {"nombre": "SHORT BOCA AZUL NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["4", "6", "8", "10", "12", "14"], "precio": "", "oferta": false}, {"nombre": "SHORT DIBU", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["4", "6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "SHORT LINIERS", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "L"], "precio": "", "oferta": false}, {"nombre": "SHORT NEGRO LISO  TELA SIMPLE FUTBOL", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "16", "S", "M"], "precio": "", "oferta": false}, {"nombre": "SHORT NEGRO LISO TELA BORDADA FUTBOL", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["4", "6", "8", "10", "12", "14", "16", "S", "M", "L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "SHORT RIVER NIÑO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["6", "8", "10", "12", "14"], "precio": "", "oferta": false}, {"nombre": "SHORT SANFRAN", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["8", "10", "12", "14", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "SHORT TIRO NEGRO", "marca": "", "categoria": "FUTBOL", "deporte": "Fútbol", "img": "", "talles": ["12", "16", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "VASO FERNET AFA 3D", "marca": "", "categoria": "FUTBOL", "deporte": "Accesorios", "img": "", "talles": ["BOTELLA CORTADA BICELESTE", "BOTELLA CORTADA NEGRA", "CHOP NEGRO", "CHOP BLANCO", "VASO COPA"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS LEONAS", "marca": "", "categoria": "HOCKEY", "deporte": "HOCKEY", "img": "", "talles": ["6", "8", "10", "12", "14", "16", "1", "2"], "precio": "", "oferta": false}, {"nombre": "BUZO ABEJA CELESTE", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["S", "M", "L", "XL"], "precio": "", "oferta": false}, {"nombre": "BUZO ABEJA NEGRO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["S", "M", "XL"], "precio": "", "oferta": false}, {"nombre": "CALZA TERMICA LARGA", "marca": "SPORT", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["6", "8", "10", "12", "14", "16", "1", "2", "3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "CAMPERA ABEJA AZUL", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMPERA ABEJA CELESTE", "marca": "", "categoria": "INDUMENTARIA", "deporte": "", "img": "", "talles": ["S", "M", "XXL", "XXXL"], "precio": "", "oferta": false}, {"nombre": "CAMPERA ABEJA GRIS", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["M", "XXL"], "precio": "", "oferta": false}, {"nombre": "CAMPERA IMPERMEABLE ANIMAL BLANCO \"VACA\"", "marca": "SMART BEE", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["M", "XXL", "3XL", "L"], "precio": "", "oferta": false}, {"nombre": "CAMPERA IMPERMEABLE CAPUCHA BRUMA NOCTURNA AZUL", "marca": "SMART BEE", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["L", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMPERA IMPERMEABLE CAPUCHA LITORAL CAMUFLADA", "marca": "SMART BEE", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["XXL", "3XL", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMPERA IMPERMEABLE CAPUCHA NEGRO", "marca": "SMART BEE", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["XL", "L", "XXL", "M"], "precio": "", "oferta": false}, {"nombre": "CAMPERA IMPERMEABLE CAPUCHUA EXA GRIS", "marca": "SMART BEE", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["XXL", "3XL", "XL"], "precio": "", "oferta": false}, {"nombre": "CAMPERAS SMART BE ROMPEVIENTOS", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["M", "L", "XL", "XXL", "XXXL"], "precio": "", "oferta": false}, {"nombre": "GORROS LANA", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["AFA", "NBA"], "precio": "", "oferta": false}, {"nombre": "JOGGING SANFRAN NIÑO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "JOGGING TIRO NIÑO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["6", "8", "10", "12"], "precio": "", "oferta": false}, {"nombre": "JOGGING VILLA MITRE NIÑO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "MUSCULOSA SELEE COMPRESION", "marca": "SELEE", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["S", "M"], "precio": "", "oferta": false}, {"nombre": "PANTALON JOGGING FRIZA ADULTO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["1", "2", "3", "4", "5", "6"], "precio": "", "oferta": false}, {"nombre": "PANTALON JOGGINGS FRIZA NIÑO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "REMERA COMPRESION SEELE BLANCAS", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["S", "XXL"], "precio": "", "oferta": false}, {"nombre": "REMERA COMPRESION SEELE NEGRA", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["L", "XL", "XXL"], "precio": "", "oferta": false}, {"nombre": "REMERA TERMICA MANGA CORTA sport", "marca": "SPORT", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "REMERAS TERMICAS  M LARGA NIÑO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["6", "8", "10", "12", "14", "16"], "precio": "", "oferta": false}, {"nombre": "REMERAS TERMICAS M LARGA ADULTO", "marca": "", "categoria": "INDUMENTARIA", "deporte": "Multideporte", "img": "", "talles": ["1", "2", "3", "4", "5"], "precio": "", "oferta": false}, {"nombre": "ANTIPARRAS", "marca": "", "categoria": "NATACION", "deporte": "NATACION", "img": "", "talles": ["JUNIORS", "SENIOR"], "precio": "", "oferta": false}, {"nombre": "PELOTAS VOLEY", "marca": "", "categoria": "PELOTAS", "deporte": "Vóley", "img": "", "talles": ["UNICO"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RUGBY ENTRENAMIENTO ADULTO", "marca": "", "categoria": "RUGBY", "deporte": "RUGBY", "img": "", "talles": ["S", "L", "XL", "XXL", "XXXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETA RUGBY JUEGO ADULTO", "marca": "", "categoria": "RUGBY", "deporte": "RUGBY", "img": "", "talles": ["M", "L", "XL", "XXL", "XXXL"], "precio": "", "oferta": false}, {"nombre": "CAMISETAS RUGBY ENTREN NIÑO", "marca": "", "categoria": "RUGBY", "deporte": "RUGBY", "img": "", "talles": ["16"], "precio": "", "oferta": false}, {"nombre": "MANGAS VOLEY", "marca": "", "categoria": "VOLEY", "deporte": "Vóley", "img": "", "talles": ["1", "2"], "precio": "", "oferta": false}, {"nombre": "RODILLERAS VOLEY", "marca": "", "categoria": "VOLEY", "deporte": "Vóley", "img": "", "talles": ["S", "M", "L", "XL", "XS"], "precio": "", "oferta": false}];
 // ━━━ GOOGLE APPS SCRIPT BACKEND V4 ━━━
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFBDyK1rXk_4zzZmAtDnxpQvu6QKmZj0VU7iefW0rNUDEWGxxJPGuZGkSeJOQi_p4Z/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQzmtUkQi9yQ49ZBMmE2wMhnTNCdM9j8B6F-g1lBr1XkSUGbvPnibzuR2BWdoeMxnp/exec";
 const CACHE_TIME = 5 * 60 * 1000;
 let pricesCache = {};
 let lastPricesFetch = 0;
 let activeFilters = { category: "", brand: "", usaSize: "" };
 
-async function loadPricesFromSheet() {
-  try {
-    const now = Date.now();
-    if (lastPricesFetch && (now - lastPricesFetch) < CACHE_TIME && Object.keys(pricesCache).length > 0) {
-      console.log("✓ Precios desde caché");
-      return pricesCache;
-    }
-    const response = await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getPrices&type=all`);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    if (data.zapas) {
-      for (const [key, val] of Object.entries(data.zapas)) {
-        pricesCache[val.nombre.toLowerCase()] = { precio: val.precio, oferta: val.oferta };
-      }
-    }
-    if (data.local) {
-      for (const [key, val] of Object.entries(data.local)) {
-        pricesCache[val.nombre.toLowerCase()] = { precio: val.precio, oferta: val.oferta };
-      }
-    }
-    lastPricesFetch = now;
-    console.log("✓ Precios cargados desde Sheets ✓");
-    localStorage.setItem("showtime_prices_cache", JSON.stringify(pricesCache));
-    return pricesCache;
-  } catch (error) {
-    console.warn("⚠ No se pudo cargar Sheets, usando caché local:", error);
-    const cached = localStorage.getItem("showtime_prices_cache");
-    if (cached) {
-      pricesCache = JSON.parse(cached);
-      return pricesCache;
-    }
-    return {};
-  }
+/* ====== BACKEND SHEETS v5 ====== */
+function fmtPrecio(n){ n=Number(String(n).replace(/[^\d.-]/g,'')); if(!n||isNaN(n))return ''; return '$'+n.toLocaleString('es-AR'); }
+function toBool(v){ return v===true || String(v).toUpperCase()==='TRUE'; }
+function mapZapaRow(r){ return { id:r.ID, nombre:r.Nombre||'', marca:r.Marca||'', modelo:r.Modelo||'', talles:(r.Talle!==''&&r.Talle!=null)?[String(r.Talle)]:[], section:(r.Categoria||'stock'), genero:r.Genero||'', img:r.Imagen||'', precioOriginal:r.Precio_Original, precioOferta:r.Precio_Oferta, precio:(r.Precio_Oferta||r.Precio_Original||''), oferta:toBool(r.Oferta_Activa), stock:r.Stock, descripcion:r.Descripcion||'', destacado:toBool(r.Destacado), visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible), slug:r.Slug||'' }; }
+function mapLocalRow(r){ return { id:r.ID, nombre:r.Nombre||'', marca:'', categoria:(r.Categoria||'OTROS'), deporte:'', talles:['-'], img:r.Imagen||'', precioOriginal:r.Precio_Original, precioOferta:r.Precio_Oferta, precio:(r.Precio_Oferta||r.Precio_Original||''), oferta:toBool(r.Oferta_Activa), stock:r.Stock, descripcion:r.Descripcion||'', destacado:toBool(r.Destacado), visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible), slug:r.Slug||'' }; }
+function mapGalRow(r){ return { id:r.ID, titulo:r.Titulo||'', club:r.Club||'', disciplina:r.Disciplina||'', img:r.Imagen||'', descripcion:r.Descripcion||'', fecha:r.Fecha||'', visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible) }; }
+async function loadFromSheets(){
+  try{
+    const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {cache:'no-store'});
+    const d = await res.json();
+    if(Array.isArray(d.ZAPATILLAS)) zapas = d.ZAPATILLAS.map(mapZapaRow);
+    if(Array.isArray(d.LOCAL)) productosLocal = d.LOCAL.map(mapLocalRow);
+    if(Array.isArray(d.GALERIA)) galeria = d.GALERIA.map(mapGalRow);
+    try{ saveData('zapas',zapas); saveData('local',productosLocal); saveData('galeria',galeria); }catch(e){}
+    renderCatRowLocal(); renderGridLocal(); renderCatRowZapas(); renderGridZapas(); renderGaleria();
+    const ap=document.getElementById('adminPanel');
+    if(ap && ap.classList.contains('show') && typeof renderAdminTables==='function') renderAdminTables();
+  }catch(e){ console.log('Sheets offline, usando caché local'); }
 }
+function postToSheet(sheet, action, data, id, hard){
+  try{ fetch(GOOGLE_APPS_SCRIPT_URL,{ method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({sheet,action,data:data||{},id:id,hard:!!hard}) }); }
+  catch(e){ console.log('Error guardando en Sheets'); }
+}
+function syncSoon(){ setTimeout(loadFromSheets, 1800); }
+
+async function loadPricesFromSheet(){ return loadFromSheets(); }
 
 function getPriceForProduct(nombre) {
   const key = nombre.toLowerCase();
@@ -894,13 +903,25 @@ function renderCustomGrid(products, titulo) {
   }
 
   grid.innerHTML = products.map(p => {
-    const pricing = getPriceForProduct(p.nombre);
-    const precioHtml = pricing.precio ? `<span style="text-decoration: line-through; color: var(--muted-2); font-size: 0.85rem;">$${pricing.precio}</span>` : '';
-    const ofertaHtml = pricing.oferta ? `<strong style="color: var(--orange); font-size: 0.9rem; margin-left: 0.3rem;">$${pricing.oferta}</strong>` : '';
+    const pOrig = Number(String(p.precioOriginal||'').replace(/[^\d.-]/g,''))||0;
+    const pOf = Number(String(p.precioOferta||'').replace(/[^\d.-]/g,''))||0;
+    const enOferta = p.oferta && pOf>0 && pOrig>0 && pOf<pOrig;
+    let precioHtml='', ofertaHtml='', ahorroHtml='', ofertaBadge='';
+    if(enOferta){
+      ofertaBadge = `<span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.6rem;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;margin-right:0.35rem;vertical-align:middle;">OFERTA</span>`;
+      precioHtml = `<span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span>`;
+      ofertaHtml = `<strong style="color:var(--orange);font-size:0.98rem;margin-left:0.3rem;">${fmtPrecio(pOf)}</strong>`;
+      ahorroHtml = `<div style="font-size:0.7rem;color:var(--orange);font-weight:700;margin-top:0.1rem;">Ahorrás ${fmtPrecio(pOrig-pOf)}</div>`;
+    } else {
+      const base = pOf>0?pOf:pOrig;
+      if(base>0) precioHtml = `<strong style="font-size:0.95rem;">${fmtPrecio(base)}</strong>`;
+    }
+    const stockNum = (p.stock===''||p.stock==null)?null:Number(p.stock);
+    const agotado = stockNum===0;
     const badgeColor = p.section === "pedido" ? "orange" : "";
 
     return `
-      <div class="card" data-product="${p.nombre}">
+      <div class="card${agotado?' agotado':''}" data-product="${p.nombre}">
         <div class="card-img-wrap">
           ${p.img ? `<img class="card-img" src="${p.img}" alt="${p.nombre}">` : `<div class="card-placeholder">${p.nombre.substring(0, 3).toUpperCase()}</div>`}
           <div class="card-cat-badge ${badgeColor}">${p.section || "?"}</div>
@@ -920,8 +941,8 @@ function renderCustomGrid(products, titulo) {
             }).join('') : '<span class="size-pill">-</span>'}
           </div>
           <div style="font-size: 0.85rem; margin-bottom: 0.7rem; min-height: 1.2rem;">
-            ${precioHtml}
-            ${ofertaHtml}
+            ${ofertaBadge}${precioHtml}${ofertaHtml}${ahorroHtml}
+            ${agotado?`<div style="font-size:0.7rem;color:#c0392b;font-weight:800;letter-spacing:0.05em;margin-top:0.15rem;">AGOTADO</div>`:''}
           </div>
           <button class="card-cta" onclick="contactarPorProducto('${p.nombre.replace(/'/g, "\'")}')">
             Consultar
@@ -941,7 +962,7 @@ function renderCustomGrid(products, titulo) {
 }
 
 function renderGridZapas() {
-  let products = zapas;
+  let products = zapas.filter(p=>p.visible!==false);
   if (activeFilters.category) {
     products = products.filter(p => p.section === activeFilters.category);
   }
@@ -958,7 +979,7 @@ function renderGridZapas() {
 }
 
 function renderGridLocal() {
-  let products = productosLocal || [];
+  let products = (productosLocal||[]).filter(p=>p.visible!==false);
   if (activeFilters.category) {
     products = products.filter(p => p.categoria === activeFilters.category);
   }
@@ -1065,7 +1086,7 @@ function updateView() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadPricesFromSheet();
+  await loadFromSheets();
   const searchInput = document.querySelector(".search-input");
   if (searchInput) {
     searchInput.addEventListener("input", searchProducts);
@@ -1234,11 +1255,16 @@ function renderGridZapas(){
 
 function renderGaleria(){
   const grid=document.getElementById('galleryGrid');
-  if(!galeria.length){
-    grid.innerHTML=Array.from({length:4},(_,i)=>`<div class="gallery-item"><div class="gallery-ph"><div class="big">0${i+1}</div><div class="sub">Próximamente</div></div></div>`).join('');
+  const items=(galeria||[]).filter(g=>g.visible!==false);
+  if(!items.length){
+    grid.innerHTML=Array.from({length:4},(_,i)=>`<div class="gallery-item"><div class="gallery-ph"><div class="big">0${i+1}</div><div class="sub">Pr\u00f3ximamente</div></div></div>`).join('');
     return;
   }
-  grid.innerHTML=galeria.map(g=>`<div class="gallery-item"><img src="${g.img}" alt="${escapeHTML(g.titulo||'')}" loading="lazy">${g.titulo?`<div class="gallery-label">${escapeHTML(g.titulo)}</div>`:''}</div>`).join('');
+  grid.innerHTML=items.map(g=>{
+    const sub=[g.club,g.disciplina].filter(Boolean).join(' \u00b7 ');
+    const label=(g.titulo||sub)?`<div class="gallery-label">${escapeHTML(g.titulo||'')}${sub?` <span style="opacity:.8;font-weight:500;">${escapeHTML(sub)}</span>`:''}</div>`:'';
+    return `<div class="gallery-item"><img src="${g.img}" alt="${escapeHTML(g.titulo||g.club||'Trabajo Showtime')}" loading="lazy">${label}</div>`;
+  }).join('');
 }
 
 let stL,stZ;
@@ -1296,8 +1322,11 @@ function renderAdminTables(){ renderAdminTableLocal(); renderAdminTableZapas(); 
   document.getElementById('cntGal').textContent=`(${galeria.length})`;
 }
 function toggleOferta(type,idx){
-  if(type==='local'){ productosLocal[idx].oferta=!productosLocal[idx].oferta; saveData('local',productosLocal); savePriceToSheet('local',idx); }
-  else{ zapas[idx].oferta=!zapas[idx].oferta; saveData('zapas',zapas); savePriceToSheet('zapas',idx); }
+  const arr=type==='local'?productosLocal:zapas;
+  if(!arr[idx])return;
+  arr[idx].oferta=!arr[idx].oferta;
+  if(arr[idx].id) postToSheet(type==='local'?'LOCAL':'ZAPATILLAS','update',{Oferta_Activa:arr[idx].oferta},arr[idx].id);
+  if(type==='local'){ saveData('local',productosLocal); renderGridLocal(); } else { saveData('zapas',zapas); renderGridZapas(); }
   renderAdminTables();
 }
 function renderAdminTableLocal(){
@@ -1333,21 +1362,30 @@ function addProduct(type){ editProduct(type,-1); }
 
 function editProduct(type,idx){
   const isNew=idx<0, p=isNew?{}:(type==='local'?productosLocal[idx]:zapas[idx]);
+  const num=v=>(v===0||v)?String(v):'';
   if(type==='local'){
     const opts=Object.keys(CAT_META).map(k=>`<option value="${k}" ${p.categoria===k?'selected':''}>${CAT_META[k].label}</option>`).join('');
     openAdminForm(`<h3>${isNew?'Agregar producto':'Editar producto'}</h3>
       <div class="field"><label>Nombre *</label><input type="text" id="fNombre" value="${escapeHTML(p.nombre||'')}"></div>
-      <div class="row2"><div class="field"><label>Marca</label><input type="text" id="fMarca" value="${escapeHTML(p.marca||'')}" placeholder="Nike..."></div><div class="field"><label>Categoría *</label><select id="fCategoria">${opts}</select></div></div>
-      <div class="field"><label>Deporte (opcional)</label><input type="text" id="fDeporte" value="${escapeHTML(p.deporte||'')}"></div>
-      <div class="field"><label>Talles (coma)</label><input type="text" id="fTalles" value="${escapeHTML((p.talles||[]).join(', '))}" placeholder="S, M, L"><div class="help">Talle único: escribí "Único" o "-"</div></div>
-      <div class="field"><label>Foto (opcional)</label><input type="file" id="fFoto" accept="image/*" onchange="previewFile(this,'fPrev')"><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+      <div class="field"><label>Categoría *</label><select id="fCategoria">${opts}</select></div>
+      <div class="row2"><div class="field"><label>Precio original</label><input type="number" id="fPrecioOrig" value="${num(p.precioOriginal)}" placeholder="25000"></div><div class="field"><label>Precio oferta</label><input type="number" id="fPrecioOferta" value="${num(p.precioOferta)}" placeholder="19999"></div></div>
+      <div class="row2"><div class="field"><label>Stock</label><input type="number" id="fStock" value="${num(p.stock)}" placeholder="(vacío = sin control)"></div><div class="field"><label>&nbsp;</label><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;;height:42px;"><input type="checkbox" id="fOfertaActiva" ${p.oferta?'checked':''} style="width:auto;"> Oferta activa</label></div></div>
+      <div class="field"><label>Descripción</label><textarea id="fDescripcion" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(p.descripcion||'')}</textarea></div>
+      <div class="row2"><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fDestacado" ${p.destacado?'checked':''} style="width:auto;"> Destacado</label></div><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fVisible" ${p.visible!==false?'checked':''} style="width:auto;"> Visible</label></div></div>
+      <div class="field"><label>Foto URL (recomendado)</label><input type="text" id="fImgUrl" value="${escapeHTML((p.img&&!String(p.img).startsWith('data:'))?p.img:'')}" placeholder="https://..."><input type="file" id="fFoto" accept="image/*" onchange="previewFile(this,'fPrev')" style="margin-top:0.4rem;"><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
       <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveLocal(${idx})">${isNew?'Agregar':'Guardar'}</button></div>`);
   } else {
     openAdminForm(`<h3>${isNew?'Agregar zapatilla':'Editar zapatilla'}</h3>
-      <div class="field"><label>Modelo *</label><input type="text" id="fNombre" value="${escapeHTML(p.nombre||'')}"></div>
-      <div class="row2"><div class="field"><label>Marca</label><input type="text" id="fMarca" value="${escapeHTML(p.marca||'Nike')}"></div><div class="field"><label>Sección *</label><select id="fSection"><option value="stock" ${p.section==='stock'?'selected':''}>★ Stock</option><option value="pedido" ${p.section==='pedido'?'selected':''}>Pedido USA</option></select></div></div>
-      <div class="field"><label>Talles (coma)</label><input type="text" id="fTalles" value="${escapeHTML((p.talles||[]).join(', '))}" placeholder="42, 43, 44"></div>
-      <div class="field"><label>Foto URL o subir</label><input type="text" id="fImgUrl" value="${escapeHTML(p.img||'')}" placeholder="https://..."><input type="file" id="fFoto" accept="image/*" onchange="previewFile(this,'fPrev')" style="margin-top:0.4rem;"><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+      <div class="field"><label>Nombre *</label><input type="text" id="fNombre" value="${escapeHTML(p.nombre||'')}"></div>
+      <div class="row2"><div class="field"><label>Marca</label><input type="text" id="fMarca" value="${escapeHTML(p.marca||'Nike')}"></div><div class="field"><label>Modelo</label><input type="text" id="fModelo" value="${escapeHTML(p.modelo||'')}"></div></div>
+      <div class="row2"><div class="field"><label>Sección *</label><select id="fSection"><option value="stock" ${p.section==='stock'?'selected':''}>★ Stock</option><option value="pedido" ${p.section==='pedido'?'selected':''}>Pedido USA</option></select></div><div class="field"><label>Género</label><input type="text" id="fGenero" value="${escapeHTML(p.genero||'')}" placeholder="Hombre..."></div></div>
+      <div class="field"><label>Talle US (coma)</label><input type="text" id="fTalles" value="${escapeHTML((p.talles||[]).join(', '))}" placeholder="12 us, 13 us"></div>
+      <div class="row2"><div class="field"><label>Precio original</label><input type="number" id="fPrecioOrig" value="${num(p.precioOriginal)}" placeholder="250000"></div><div class="field"><label>Precio oferta</label><input type="number" id="fPrecioOferta" value="${num(p.precioOferta)}" placeholder="199999"></div></div>
+      <div class="row2"><div class="field"><label>Stock</label><input type="number" id="fStock" value="${num(p.stock)}" placeholder="(vacío = sin control)"></div><div class="field"><label>&nbsp;</label><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;;height:42px;"><input type="checkbox" id="fOfertaActiva" ${p.oferta?'checked':''} style="width:auto;"> Oferta activa</label></div></div>
+      <div class="field"><label>Descripción</label><textarea id="fDescripcion" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(p.descripcion||'')}</textarea></div>
+      <div class="row2"><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fDestacado" ${p.destacado?'checked':''} style="width:auto;"> Destacado</label></div><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fVisible" ${p.visible!==false?'checked':''} style="width:auto;"> Visible</label></div></div>
+      <div class="field"><label>Slug (URL, opcional)</label><input type="text" id="fSlug" value="${escapeHTML(p.slug||'')}" placeholder="se genera solo"></div>
+      <div class="field"><label>Foto URL o subir</label><input type="text" id="fImgUrl" value="${escapeHTML((p.img&&!String(p.img).startsWith('data:'))?p.img:'')}" placeholder="https://..."><input type="file" id="fFoto" accept="image/*" onchange="previewFile(this,'fPrev')" style="margin-top:0.4rem;"><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
       <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveZapa(${idx})">${isNew?'Agregar':'Guardar'}</button></div>`);
   }
 }
@@ -1357,44 +1395,63 @@ function previewFile(input,prevId){
   const r=new FileReader(); r.onload=e=>{ document.getElementById(prevId).innerHTML=`<img src="${e.target.result}">`; input.dataset.base64=e.target.result; }; r.readAsDataURL(f);
 }
 function saveLocal(idx){
-  const nombre=document.getElementById('fNombre').value.trim(); if(!nombre){alert('Falta nombre');return;}
-  const b64=document.getElementById('fFoto').dataset.base64, ex=idx>=0?productosLocal[idx].img:'';
-  const talles=document.getElementById('fTalles').value.split(',').map(s=>s.trim()).filter(Boolean);
-  const data={nombre,marca:document.getElementById('fMarca').value.trim(),categoria:document.getElementById('fCategoria').value,deporte:document.getElementById('fDeporte').value.trim(),talles:talles.length?talles:['-'],img:b64||ex||''};
-  if(idx>=0) productosLocal[idx]=data; else productosLocal.unshift(data);
-  saveData('local',productosLocal); closeAdminForm(); renderAdminTables(); renderCatRowLocal(); renderGridLocal();
-  showToast(idx>=0?'✓ Actualizado':'✓ Agregado');
+  const gv=id=>{const e=document.getElementById(id);return e?String(e.value).trim():'';};
+  const gc=id=>{const e=document.getElementById(id);return e?e.checked:false;};
+  const nombre=gv('fNombre'); if(!nombre){alert('Falta el nombre');return;}
+  const b64=document.getElementById('fFoto').dataset.base64, url=gv('fImgUrl'), ex=idx>=0?productosLocal[idx].img:'';
+  const img=b64||url||ex||'';
+  let slug=nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const data={ id: idx>=0?productosLocal[idx].id:('tmp'+Date.now()), nombre, categoria:document.getElementById('fCategoria').value, marca:'', deporte:'', talles:['-'], img, precioOriginal:gv('fPrecioOrig'), precioOferta:gv('fPrecioOferta'), precio:(gv('fPrecioOferta')||gv('fPrecioOrig')), oferta:gc('fOfertaActiva'), stock:gv('fStock'), descripcion:gv('fDescripcion'), destacado:gc('fDestacado'), visible:gc('fVisible'), slug };
+  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); }
+  const sd={Nombre:nombre,Categoria:data.categoria,Imagen:imgSheet,Precio_Original:data.precioOriginal,Precio_Oferta:data.precioOferta,Oferta_Activa:data.oferta,Descripcion:data.descripcion,Stock:data.stock,Destacado:data.destacado,Visible:data.visible,Slug:slug};
+  if(idx>=0){ productosLocal[idx]=data; postToSheet('LOCAL','update',sd,data.id); } else { productosLocal.unshift(data); postToSheet('LOCAL','create',sd); }
+  saveData('local',productosLocal); closeAdminForm(); renderAdminTables(); renderCatRowLocal(); renderGridLocal(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Agregado'); syncSoon();
 }
 function saveZapa(idx){
-  const nombre=document.getElementById('fNombre').value.trim(); if(!nombre){alert('Falta modelo');return;}
-  const b64=document.getElementById('fFoto').dataset.base64, url=document.getElementById('fImgUrl').value.trim(), ex=idx>=0?zapas[idx].img:'';
-  const talles=document.getElementById('fTalles').value.split(',').map(s=>s.trim()).filter(Boolean);
-  const data={nombre,marca:document.getElementById('fMarca').value.trim()||'Nike',section:document.getElementById('fSection').value,talles,img:b64||url||ex||''};
-  if(idx>=0) zapas[idx]=data; else zapas.unshift(data);
-  saveData('zapas',zapas); closeAdminForm(); renderAdminTables(); renderCatRowZapas(); renderGridZapas();
-  showToast(idx>=0?'✓ Actualizado':'✓ Agregado');
+  const gv=id=>{const e=document.getElementById(id);return e?String(e.value).trim():'';};
+  const gc=id=>{const e=document.getElementById(id);return e?e.checked:false;};
+  const nombre=gv('fNombre'); if(!nombre){alert('Falta el nombre');return;}
+  const b64=document.getElementById('fFoto').dataset.base64, url=gv('fImgUrl'), ex=idx>=0?zapas[idx].img:'';
+  const img=b64||url||ex||'';
+  const talles=gv('fTalles').split(',').map(s=>s.trim()).filter(Boolean);
+  let slug=gv('fSlug')||nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const data={ id: idx>=0?zapas[idx].id:('tmp'+Date.now()), nombre, marca:gv('fMarca')||'Nike', modelo:gv('fModelo'), section:document.getElementById('fSection').value, genero:gv('fGenero'), talles, img, precioOriginal:gv('fPrecioOrig'), precioOferta:gv('fPrecioOferta'), precio:(gv('fPrecioOferta')||gv('fPrecioOrig')), oferta:gc('fOfertaActiva'), stock:gv('fStock'), descripcion:gv('fDescripcion'), destacado:gc('fDestacado'), visible:gc('fVisible'), slug };
+  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); }
+  const sd={Nombre:nombre,Marca:data.marca,Modelo:data.modelo,Talle:talles.join(', '),Categoria:data.section,Genero:data.genero,Imagen:imgSheet,Precio_Original:data.precioOriginal,Precio_Oferta:data.precioOferta,Oferta_Activa:data.oferta,Stock:data.stock,Descripcion:data.descripcion,Destacado:data.destacado,Visible:data.visible,Slug:slug};
+  if(idx>=0){ zapas[idx]=data; postToSheet('ZAPATILLAS','update',sd,data.id); } else { zapas.unshift(data); postToSheet('ZAPATILLAS','create',sd); }
+  saveData('zapas',zapas); closeAdminForm(); renderAdminTables(); renderCatRowZapas(); renderGridZapas(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Agregado'); syncSoon();
 }
 function deleteProduct(type,idx){
-  if(!confirm('¿Eliminar este producto?')) return;
-  if(type==='local'){ productosLocal.splice(idx,1); saveData('local',productosLocal); renderCatRowLocal(); renderGridLocal(); }
-  else { zapas.splice(idx,1); saveData('zapas',zapas); renderCatRowZapas(); renderGridZapas(); }
-  renderAdminTables(); showToast('🗑 Eliminado');
+  if(!confirm('\u00bfEliminar este producto?')) return;
+  const arr=type==='local'?productosLocal:zapas;
+  const id=arr[idx]?arr[idx].id:null;
+  if(id) postToSheet(type==='local'?'LOCAL':'ZAPATILLAS','delete',{},id,true);
+  arr.splice(idx,1);
+  if(type==='local'){ saveData('local',productosLocal); renderCatRowLocal(); renderGridLocal(); }
+  else { saveData('zapas',zapas); renderCatRowZapas(); renderGridZapas(); }
+  renderAdminTables(); showToast('\ud83d\uddd1 Eliminado');
 }
 function addGalleryItem(){ editGalleryItem(-1); }
 function editGalleryItem(idx){
   const isNew=idx<0, g=isNew?{}:galeria[idx];
-  openAdminForm(`<h3>${isNew?'Subir foto':'Editar foto'}</h3>
-    <div class="field"><label>Título / Cliente</label><input type="text" id="fGalTit" value="${escapeHTML(g.titulo||'')}" placeholder="Club Bahía - Camisetas"></div>
-    <div class="field"><label>Foto *</label><input type="file" id="fGalFoto" accept="image/*" onchange="previewFile(this,'fGalPrev')"><div class="file-preview" id="fGalPrev">${g.img?`<img src="${g.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+  openAdminForm(`<h3>${isNew?'Subir trabajo':'Editar trabajo'}</h3>
+    <div class="field"><label>T\u00edtulo / Cliente</label><input type="text" id="fGalTit" value="${escapeHTML(g.titulo||'')}" placeholder="Club Bah\u00eda - Camisetas"></div>
+    <div class="row2"><div class="field"><label>Club</label><input type="text" id="fGalClub" value="${escapeHTML(g.club||'')}"></div><div class="field"><label>Disciplina</label><input type="text" id="fGalDisc" value="${escapeHTML(g.disciplina||'')}" placeholder="F\u00fatbol..."></div></div>
+    <div class="field"><label>Descripci\u00f3n</label><textarea id="fGalDesc" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(g.descripcion||'')}</textarea></div>
+    <div class="field"><label>Foto URL (recomendado)</label><input type="text" id="fGalUrl" value="${escapeHTML((g.img&&!String(g.img).startsWith('data:'))?g.img:'')}" placeholder="https://..."></div>
+    <div class="field"><label>...o subir archivo</label><input type="file" id="fGalFoto" accept="image/*" onchange="previewFile(this,'fGalPrev')"><div class="file-preview" id="fGalPrev">${g.img?`<img src="${g.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
     <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveGallery(${idx})">${isNew?'Subir':'Guardar'}</button></div>`);
 }
 function saveGallery(idx){
-  const b64=document.getElementById('fGalFoto').dataset.base64, ex=idx>=0?galeria[idx].img:'', img=b64||ex;
-  if(!img){alert('Falta la foto');return;}
-  const data={titulo:document.getElementById('fGalTit').value.trim(),img};
-  if(idx>=0) galeria[idx]=data; else galeria.unshift(data);
-  saveData('galeria',galeria); closeAdminForm(); renderAdminTables(); renderGaleria();
-  showToast(idx>=0?'✓ Actualizado':'✓ Subido');
+  const gv=id=>{const e=document.getElementById(id);return e?String(e.value).trim():'';};
+  const b64=document.getElementById('fGalFoto').dataset.base64, url=gv('fGalUrl'), ex=idx>=0?galeria[idx].img:'';
+  const img=b64||url||ex;
+  if(!img){alert('Falta la foto (sub\u00ed archivo o peg\u00e1 URL)');return;}
+  const data={ id:idx>=0?galeria[idx].id:('tmp'+Date.now()), titulo:gv('fGalTit'), club:gv('fGalClub'), disciplina:gv('fGalDisc'), descripcion:gv('fGalDesc'), img, visible:true, fecha:(idx>=0&&galeria[idx].fecha)?galeria[idx].fecha:new Date().toISOString().slice(0,10) };
+  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); if(!imgSheet) showToast('\u26a0 Foto muy pesada: peg\u00e1 una URL para sincronizar'); }
+  const sd={Titulo:data.titulo,Club:data.club,Disciplina:data.disciplina,Imagen:imgSheet,Descripcion:data.descripcion,Fecha:data.fecha,Visible:true};
+  if(idx>=0){ galeria[idx]=data; postToSheet('GALERIA','update',sd,data.id); } else { galeria.unshift(data); postToSheet('GALERIA','create',sd); }
+  saveData('galeria',galeria); closeAdminForm(); renderAdminTables(); renderGaleria(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Subido'); syncSoon();
 }
 function deleteGalleryItem(idx){ if(!confirm('¿Eliminar esta foto?')) return; galeria.splice(idx,1); saveData('galeria',galeria); renderAdminTables(); renderGaleria(); showToast('🗑 Eliminado'); }
 function resetData(type){
@@ -1413,7 +1470,8 @@ function showToast(msg){ const t=document.getElementById('toast'); t.textContent
 renderCatRowLocal(); renderGridLocal();
 renderCatRowZapas(); renderGridZapas();
 renderGaleria(); initViewFromURL();
-loadPricesFromSheet();
+loadFromSheets();
+setInterval(()=>{ const o=document.getElementById('adminFormOverlay'); if(!o||!o.classList.contains('show')) loadFromSheets(); }, 60000);
 
 </script>
 
