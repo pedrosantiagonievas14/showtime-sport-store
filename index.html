@@ -822,8 +822,8 @@ let activeFilters = { category: "", brand: "", usaSize: "" };
 /* ====== BACKEND SHEETS v5 ====== */
 function fmtPrecio(n){ n=Number(String(n).replace(/[^\d.-]/g,'')); if(!n||isNaN(n))return ''; return '$'+n.toLocaleString('es-AR'); }
 function toBool(v){ return v===true || String(v).toUpperCase()==='TRUE'; }
-function mapZapaRow(r){ return { id:r.ID, nombre:r.Nombre||'', marca:r.Marca||'', modelo:r.Modelo||'', talles:(r.Talle!==''&&r.Talle!=null)?[String(r.Talle)]:[], section:(r.Categoria||'stock'), genero:r.Genero||'', img:r.Imagen||'', precioOriginal:r.Precio_Original, precioOferta:r.Precio_Oferta, precio:(r.Precio_Oferta||r.Precio_Original||''), oferta:toBool(r.Oferta_Activa), stock:r.Stock, descripcion:r.Descripcion||'', destacado:toBool(r.Destacado), visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible), slug:r.Slug||'' }; }
-function mapLocalRow(r){ return { id:r.ID, nombre:r.Nombre||'', marca:'', categoria:(r.Categoria||'OTROS'), deporte:'', talles:['-'], img:r.Imagen||'', precioOriginal:r.Precio_Original, precioOferta:r.Precio_Oferta, precio:(r.Precio_Oferta||r.Precio_Original||''), oferta:toBool(r.Oferta_Activa), stock:r.Stock, descripcion:r.Descripcion||'', destacado:toBool(r.Destacado), visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible), slug:r.Slug||'' }; }
+function mapZapaRow(r){ return { id:r.ID, nombre:r.Nombre||'', marca:r.Marca||'', modelo:r.Modelo||'', talles:(r.Talle!==''&&r.Talle!=null)?String(r.Talle).split(',').map(function(s){return s.trim();}).filter(Boolean):[], section:(r.Categoria||'stock'), genero:r.Genero||'', img:r.Imagen||'', precioOriginal:r.Precio_Original, precioOferta:r.Precio_Oferta, precio:(r.Precio_Oferta||r.Precio_Original||''), oferta:toBool(r.Oferta_Activa), stock:r.Stock, descripcion:r.Descripcion||'', destacado:toBool(r.Destacado), visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible), slug:r.Slug||'' }; }
+function mapLocalRow(r){ return { id:r.ID, nombre:r.Nombre||'', marca:'', categoria:(r.Categoria||'OTROS'), deporte:'', talles:(r.Talle!==''&&r.Talle!=null)?String(r.Talle).split(',').map(function(s){return s.trim();}).filter(Boolean):[], img:r.Imagen||'', precioOriginal:r.Precio_Original, precioOferta:r.Precio_Oferta, precio:(r.Precio_Oferta||r.Precio_Original||''), oferta:toBool(r.Oferta_Activa), stock:r.Stock, descripcion:r.Descripcion||'', destacado:toBool(r.Destacado), visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible), slug:r.Slug||'' }; }
 function mapGalRow(r){ return { id:r.ID, titulo:r.Titulo||'', club:r.Club||'', disciplina:r.Disciplina||'', img:r.Imagen||'', descripcion:r.Descripcion||'', fecha:r.Fecha||'', visible:(r.Visible===''||r.Visible==null)?true:toBool(r.Visible) }; }
 async function loadFromSheets(){
   try{
@@ -868,14 +868,10 @@ function filterByUSASize(size) {
   renderGridZapas();
 }
 
-function getUniqueBrands(products) {
-  const brands = new Set();
-  products.forEach(p => {
-    if (p.marca && p.marca.trim()) {
-      brands.add(p.marca.trim());
-    }
-  });
-  return Array.from(brands).sort();
+function getUniqueBrands(products){
+  const map={};
+  products.forEach(p=>{ if(p.marca&&String(p.marca).trim()){ const k=String(p.marca).trim().toLowerCase(); if(!map[k]) map[k]=String(p.marca).trim(); } });
+  return Object.keys(map).sort().map(k=>map[k]);
 }
 
 function searchProducts() {
@@ -940,6 +936,7 @@ function renderCustomGrid(products, titulo) {
               return `<div class="size-pill ${isMasUnico || isPedido ? 'unico' : ''}">${t}</div>`;
             }).join('') : '<span class="size-pill">-</span>'}
           </div>
+          ${p.descripcion?`<div style="font-size:0.8rem;color:var(--muted);margin:-0.1rem 0 0.55rem;line-height:1.35;">${escapeHTML(p.descripcion)}</div>`:''}
           <div style="font-size: 0.85rem; margin-bottom: 0.7rem; min-height: 1.2rem;">
             ${ofertaBadge}${precioHtml}${ofertaHtml}${ahorroHtml}
             ${agotado?`<div style="font-size:0.7rem;color:#c0392b;font-weight:800;letter-spacing:0.05em;margin-top:0.15rem;">AGOTADO</div>`:''}
@@ -967,10 +964,10 @@ function renderGridZapas() {
     products = products.filter(p => p.section === activeFilters.category);
   }
   if (activeFilters.brand) {
-    products = products.filter(p => p.marca === activeFilters.brand);
+    products = products.filter(p => (p.marca||'').toLowerCase() === activeFilters.brand);
   }
   if (activeFilters.usaSize) {
-    products = products.filter(p => p.talles && p.talles.some(t => t.includes(activeFilters.usaSize)));
+    products = products.filter(p => Array.isArray(p.talles) && p.talles.some(t => String(t).replace(/us/i,'').trim() === activeFilters.usaSize));
   }
   renderCustomGrid(products, "Zapas de Stock");
   updateCategoryRow(zapas);
@@ -984,7 +981,7 @@ function renderGridLocal() {
     products = products.filter(p => p.categoria === activeFilters.category);
   }
   if (activeFilters.brand) {
-    products = products.filter(p => p.marca === activeFilters.brand);
+    products = products.filter(p => (p.marca||'').toLowerCase() === activeFilters.brand);
   }
   renderCustomGrid(products, "Local");
   updateCategoryRowLocal(productosLocal);
@@ -1022,7 +1019,7 @@ function updateBrandFilters(products) {
   if (!toolbar) return;
   const brands = getUniqueBrands(products);
   const filterHtml = `<div style="margin-top: 1rem; padding: 0.5rem 0; border-top: 1px solid var(--line);"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; font-weight: 600;">Marcas:</div><div class="cat-row" style="gap: 0.3rem;"><button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByBrand('all')">TODAS</button>` +
-    brands.map(b => `<button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByBrand('${b}')">${b.toUpperCase()}</button>`).join('') + `</div></div>`;
+    brands.map(b => `<button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByBrand('${(b||'').toLowerCase()}')">${b.toUpperCase()}</button>`).join('') + `</div></div>`;
   let brandContainer = toolbar.querySelector(".brand-filters");
   if (!brandContainer) {
     brandContainer = document.createElement("div");
@@ -1037,7 +1034,7 @@ function updateBrandFiltersLocal(products) {
   if (!toolbar) return;
   const brands = getUniqueBrands(products);
   const filterHtml = `<div style="margin-top: 1rem; padding: 0.5rem 0; border-top: 1px solid var(--line);"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; font-weight: 600;">Marcas:</div><div class="cat-row" style="gap: 0.3rem;"><button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByBrand('all')">TODAS</button>` +
-    brands.map(b => `<button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByBrand('${b}')">${b.toUpperCase()}</button>`).join('') + `</div></div>`;
+    brands.map(b => `<button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByBrand('${(b||'').toLowerCase()}')">${b.toUpperCase()}</button>`).join('') + `</div></div>`;
   let brandContainer = toolbar.querySelector(".brand-filters");
   if (!brandContainer) {
     brandContainer = document.createElement("div");
@@ -1047,28 +1044,18 @@ function updateBrandFiltersLocal(products) {
   brandContainer.innerHTML = filterHtml;
 }
 
-function updateUSASizeFilter(products) {
-  const sizes = new Set();
-  products.forEach(p => {
-    if (Array.isArray(p.talles)) {
-      p.talles.forEach(t => {
-        if (t.includes("us")) {
-          const size = t.split(" ")[0];
-          sizes.add(size);
-        }
-      });
-    }
-  });
-  const sizeList = Array.from(sizes).sort((a, b) => parseFloat(a) - parseFloat(b)).slice(0, 6);
-  const filterHtml = `<div style="margin-top: 1rem; padding: 0.5rem 0; border-top: 1px solid var(--line);"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; font-weight: 600;">Talles USA:</div><div class="cat-row" style="gap: 0.3rem;"><button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByUSASize('all')">TODOS</button>` +
-    sizeList.map(s => `<button class="cat-btn" style="font-size: 0.7rem;" onclick="filterByUSASize('${s}')">${s}</button>`).join('') + `</div></div>`;
-  let sizeContainer = document.querySelector("[data-view='view-zapas'] .toolbar .size-filters");
-  if (!sizeContainer) {
-    sizeContainer = document.createElement("div");
-    sizeContainer.className = "size-filters";
-    document.querySelector("[data-view='view-zapas'] .toolbar").appendChild(sizeContainer);
-  }
-  sizeContainer.innerHTML = filterHtml;
+function updateUSASizeFilter(products){
+  const toolbar = document.querySelector("[data-view='view-zapas'] .toolbar");
+  if(!toolbar) return;
+  const sizes=new Set();
+  products.forEach(p=>{ if(Array.isArray(p.talles)) p.talles.forEach(t=>{ t=String(t); if(/us/i.test(t)){ const s=t.replace(/us/i,'').trim(); if(s) sizes.add(s); } }); });
+  const sizeList=Array.from(sizes).sort((a,b)=>parseFloat(a)-parseFloat(b));
+  let cont=toolbar.querySelector('.size-filters');
+  if(!cont){ cont=document.createElement('div'); cont.className='size-filters'; toolbar.appendChild(cont); }
+  if(!sizeList.length){ cont.innerHTML=''; return; }
+  const act=activeFilters.usaSize;
+  cont.innerHTML = `<div style="margin-top:1rem;padding:0.5rem 0;border-top:1px solid var(--line);"><div style="font-size:0.75rem;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;font-weight:600;">Talle USA:</div><div class="cat-row" style="gap:0.3rem;flex-wrap:wrap;"><button class="cat-btn${act?'':' active'}" style="font-size:0.7rem;" onclick="filterByUSASize('all')">TODOS</button>`+
+    sizeList.map(s=>`<button class="cat-btn${act===s?' active':''}" style="font-size:0.7rem;" onclick="filterByUSASize('${s}')">${s} US</button>`).join('')+`</div></div>`;
 }
 
 function contactarPorProducto(nombre) {
@@ -1368,6 +1355,7 @@ function editProduct(type,idx){
     openAdminForm(`<h3>${isNew?'Agregar producto':'Editar producto'}</h3>
       <div class="field"><label>Nombre *</label><input type="text" id="fNombre" value="${escapeHTML(p.nombre||'')}"></div>
       <div class="field"><label>Categoría *</label><select id="fCategoria">${opts}</select></div>
+      <div class="field"><label>Talles (coma)</label><input type="text" id="fTalles" value="${escapeHTML((p.talles||[]).join(', '))}" placeholder="S, M, L, XL"></div>
       <div class="row2"><div class="field"><label>Precio original</label><input type="number" id="fPrecioOrig" value="${num(p.precioOriginal)}" placeholder="25000"></div><div class="field"><label>Precio oferta</label><input type="number" id="fPrecioOferta" value="${num(p.precioOferta)}" placeholder="19999"></div></div>
       <div class="row2"><div class="field"><label>Stock</label><input type="number" id="fStock" value="${num(p.stock)}" placeholder="(vacío = sin control)"></div><div class="field"><label>&nbsp;</label><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;;height:42px;"><input type="checkbox" id="fOfertaActiva" ${p.oferta?'checked':''} style="width:auto;"> Oferta activa</label></div></div>
       <div class="field"><label>Descripción</label><textarea id="fDescripcion" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(p.descripcion||'')}</textarea></div>
@@ -1401,9 +1389,9 @@ function saveLocal(idx){
   const b64=document.getElementById('fFoto').dataset.base64, url=gv('fImgUrl'), ex=idx>=0?productosLocal[idx].img:'';
   const img=b64||url||ex||'';
   let slug=nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-  const data={ id: idx>=0?productosLocal[idx].id:('tmp'+Date.now()), nombre, categoria:document.getElementById('fCategoria').value, marca:'', deporte:'', talles:['-'], img, precioOriginal:gv('fPrecioOrig'), precioOferta:gv('fPrecioOferta'), precio:(gv('fPrecioOferta')||gv('fPrecioOrig')), oferta:gc('fOfertaActiva'), stock:gv('fStock'), descripcion:gv('fDescripcion'), destacado:gc('fDestacado'), visible:gc('fVisible'), slug };
+  const data={ id: idx>=0?productosLocal[idx].id:('tmp'+Date.now()), nombre, categoria:document.getElementById('fCategoria').value, marca:'', deporte:'', talles:gv('fTalles').split(',').map(s=>s.trim()).filter(Boolean), img, precioOriginal:gv('fPrecioOrig'), precioOferta:gv('fPrecioOferta'), precio:(gv('fPrecioOferta')||gv('fPrecioOrig')), oferta:gc('fOfertaActiva'), stock:gv('fStock'), descripcion:gv('fDescripcion'), destacado:gc('fDestacado'), visible:gc('fVisible'), slug };
   let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); }
-  const sd={Nombre:nombre,Categoria:data.categoria,Imagen:imgSheet,Precio_Original:data.precioOriginal,Precio_Oferta:data.precioOferta,Oferta_Activa:data.oferta,Descripcion:data.descripcion,Stock:data.stock,Destacado:data.destacado,Visible:data.visible,Slug:slug};
+  const sd={Nombre:nombre,Categoria:data.categoria,Talle:(data.talles||[]).join(', '),Imagen:imgSheet,Precio_Original:data.precioOriginal,Precio_Oferta:data.precioOferta,Oferta_Activa:data.oferta,Descripcion:data.descripcion,Stock:data.stock,Destacado:data.destacado,Visible:data.visible,Slug:slug};
   if(idx>=0){ productosLocal[idx]=data; postToSheet('LOCAL','update',sd,data.id); } else { productosLocal.unshift(data); postToSheet('LOCAL','create',sd); }
   saveData('local',productosLocal); closeAdminForm(); renderAdminTables(); renderCatRowLocal(); renderGridLocal(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Agregado'); syncSoon();
 }
