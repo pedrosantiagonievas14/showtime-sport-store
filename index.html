@@ -1162,16 +1162,25 @@ function filterLocal(){
 function renderGridLocal(){
   const list=filterLocal(), grid=document.getElementById('gridLocal');
   document.getElementById('resultsLocal').innerHTML=`<strong>${list.length}</strong> producto${list.length===1?'':'s'}`;
-  if(!list.length){ grid.innerHTML=`<div class="empty-state"><div class="ico">∅</div><p>No encontramos productos</p><p class="sub">Probá otra categoría o palabra</p></div>`; return; }
+  if(!list.length){ grid.innerHTML=`<div class="empty-state"><div class="ico">\u2205</div><p>No encontramos productos</p><p class="sub">Prob\u00e1 otra categor\u00eda o palabra</p></div>`; return; }
   grid.innerHTML=list.map(p=>{
-    const cat=CAT_META[p.categoria]||{label:p.categoria,icon:'●'};
-    const vis=(p.talles||[]).slice(0,7), extra=(p.talles||[]).length-vis.length;
-    const sizes=vis.map(s=>`<span class="size-pill${isUnico(s)?' unico':''}">${isUnico(s)?'Único':escapeHTML(s)}</span>`).join('')+(extra>0?`<span class="size-pill">+${extra}</span>`:'');
+    const cat=CAT_META[p.categoria]||{label:p.categoria,icon:'\u25cf'};
+    const vis=(p.talles||[]).filter(t=>t&&t!=='-').slice(0,7), extra=Math.max(0,(p.talles||[]).filter(t=>t&&t!=='-').length-vis.length);
+    const sizes=vis.map(s=>`<span class="size-pill${isUnico(s)?' unico':''}">${isUnico(s)?'\u00danico':escapeHTML(s)}</span>`).join('')+(extra>0?`<span class="size-pill">+${extra}</span>`:'');
     const idx=productosLocal.indexOf(p);
     const img=p.img?`<img class="card-img" src="${p.img}" alt="${escapeHTML(p.nombre)}">`:`<div class="card-placeholder">${cat.icon}</div>`;
-    const priceBadge=p.precio?`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">$${escapeHTML(p.precio)}</div>`:'';
-    const ofertaBadge=p.oferta?`<div style="background:var(--orange);color:white;padding:2px 8px;border-radius:3px;font-size:0.75rem;font-weight:600;margin-top:4px;display:inline-block;">OFERTA</div>`:'';
-    return `<div class="card" onclick="openModal('local',${idx})"><div class="card-img-wrap"><span class="card-cat-badge">${cat.label}</span>${img}</div><div class="card-body"><div class="card-title">${escapeHTML(p.nombre)}</div><div class="card-meta">${p.marca?`<span>${escapeHTML(p.marca)}</span>`:''}${p.deporte&&p.deporte.toLowerCase()!==(p.categoria||'').toLowerCase()?`<span>· ${escapeHTML(p.deporte)}</span>`:''}</div>${priceBadge}${ofertaBadge}<div class="card-sizes">${sizes}</div><div class="card-cta"><span>Consultar</span>${ARROWSVG}</div></div></div>`;
+    const pOrig=Number(String(p.precioOriginal||'').replace(/[^\d.-]/g,''))||0;
+    const pOf=Number(String(p.precioOferta||'').replace(/[^\d.-]/g,''))||0;
+    const enOferta=p.oferta&&pOf>0&&pOrig>0&&pOf<pOrig;
+    const stockNum=(p.stock===''||p.stock==null)?null:Number(p.stock);
+    const agotado=stockNum===0;
+    let priceBadge='';
+    if(enOferta){ priceBadge=`<div style="margin-top:6px;"><span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span> <strong style="color:var(--orange);font-size:0.95rem;">${fmtPrecio(pOf)}</strong><div style="font-size:0.7rem;color:var(--orange);font-weight:700;">Ahorr\u00e1s ${fmtPrecio(pOrig-pOf)}</div></div>`; }
+    else { const base=pOf>0?pOf:pOrig; if(base>0) priceBadge=`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">${fmtPrecio(base)}</div>`; }
+    const ofertaBadge=enOferta?`<span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;">OFERTA</span>`:'';
+    const agotadoBadge=agotado?`<div style="font-size:0.7rem;color:#c0392b;font-weight:800;margin-top:4px;">AGOTADO</div>`:'';
+    const descHtml=p.descripcion?`<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.3;">${escapeHTML(p.descripcion)}</div>`:'';
+    return `<div class="card${agotado?' agotado':''}" onclick="openModal('local',${idx})"><div class="card-img-wrap"><span class="card-cat-badge">${cat.label}</span>${img}</div><div class="card-body"><div class="card-title">${escapeHTML(p.nombre)}</div><div class="card-meta">${p.marca?`<span>${escapeHTML(p.marca)}</span>`:''}${p.deporte&&p.deporte.toLowerCase()!==(p.categoria||'').toLowerCase()?`<span>\u00b7 ${escapeHTML(p.deporte)}</span>`:''}</div>${priceBadge}${ofertaBadge}${agotadoBadge}${descHtml}<div class="card-sizes">${sizes}</div><div class="card-cta"><span>Consultar</span>${ARROWSVG}</div></div></div>`;
   }).join('');
 }
 
@@ -1220,21 +1229,32 @@ function filterZapas(){
 function renderGridZapas(){
   const usaBox=document.getElementById('usaBox');
   if(usaBox) usaBox.style.display=(currentCatZapas==='all'||currentCatZapas==='pedido')?'':'none';
-  const list=filterZapas().slice().sort((a,b)=>a.section===b.section?0:(a.section==='stock'?-1:1));
+  let list=filterZapas().slice().sort((a,b)=>a.section===b.section?0:(a.section==='stock'?-1:1));
+  if(currentSizeZapas) list=list.filter(p=>Array.isArray(p.talles)&&p.talles.some(t=>String(t).replace(/us/i,'').trim()===currentSizeZapas));
   const grid=document.getElementById('gridZapas');
   document.getElementById('resultsZapas').innerHTML=`<strong>${list.length}</strong> zapatilla${list.length===1?'':'s'}`;
-  if(!list.length){ grid.innerHTML=`<div class="empty-state"><div class="ico">∅</div><p>No encontramos zapatillas</p></div>`; return; }
+  if(!list.length){ grid.innerHTML=`<div class="empty-state"><div class="ico">\u2205</div><p>No encontramos zapatillas</p></div>`; renderSizeRowZapas(); return; }
   grid.innerHTML=list.map(p=>{
     const idx=zapas.indexOf(p);
-    const tag=p.section==='stock'?'★ Stock':'Pedido USA', tagCls=p.section==='stock'?'card-cat-badge orange':'card-cat-badge';
+    const tag=p.section==='stock'?'\u2605 Stock':'Pedido USA', tagCls=p.section==='stock'?'card-cat-badge orange':'card-cat-badge';
     let sizes='';
     if(p.section==='stock'&&p.talles&&p.talles.length) sizes=p.talles.slice(0,7).map(s=>`<span class="size-pill">${escapeHTML(s)}</span>`).join('');
     else if(p.section==='pedido') sizes=`<span class="size-pill pedido">A pedido</span>`;
-    const img=p.img?`<img class="card-img" src="${p.img}" alt="${escapeHTML(p.nombre)}" loading="lazy" style="mix-blend-mode:normal;">`:`<div class="card-placeholder">👟</div>`;
-    const priceBadge=p.precio?`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">$${escapeHTML(p.precio)}</div>`:'';
-    const ofertaBadge=p.oferta?`<div style="background:var(--orange);color:white;padding:2px 8px;border-radius:3px;font-size:0.75rem;font-weight:600;margin-top:4px;display:inline-block;">OFERTA</div>`:'';
-    return `<div class="card" onclick="openModal('zapas',${idx})"><div class="card-img-wrap"><span class="${tagCls}">${tag}</span><span class="card-brand-badge">${escapeHTML(p.marca||'')}</span>${img}</div><div class="card-body"><div class="card-title">${escapeHTML(p.nombre)}</div><div class="card-meta"><span>Basketball</span>${p.marca?`<span>· ${escapeHTML(p.marca)}</span>`:''}</div>${priceBadge}${ofertaBadge}<div class="card-sizes">${sizes}</div><div class="card-cta"><span>Consultar</span>${ARROWSVG}</div></div></div>`;
+    const img=p.img?`<img class="card-img" src="${p.img}" alt="${escapeHTML(p.nombre)}" loading="lazy" style="mix-blend-mode:normal;">`:`<div class="card-placeholder">\ud83d\udc5f</div>`;
+    const pOrig=Number(String(p.precioOriginal||'').replace(/[^\d.-]/g,''))||0;
+    const pOf=Number(String(p.precioOferta||'').replace(/[^\d.-]/g,''))||0;
+    const enOferta=p.oferta&&pOf>0&&pOrig>0&&pOf<pOrig;
+    const stockNum=(p.stock===''||p.stock==null)?null:Number(p.stock);
+    const agotado=stockNum===0;
+    let priceBadge='';
+    if(enOferta){ priceBadge=`<div style="margin-top:6px;"><span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span> <strong style="color:var(--orange);font-size:0.95rem;">${fmtPrecio(pOf)}</strong><div style="font-size:0.7rem;color:var(--orange);font-weight:700;">Ahorr\u00e1s ${fmtPrecio(pOrig-pOf)}</div></div>`; }
+    else { const base=pOf>0?pOf:pOrig; if(base>0) priceBadge=`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">${fmtPrecio(base)}</div>`; }
+    const ofertaBadge=enOferta?`<span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;">OFERTA</span>`:'';
+    const agotadoBadge=agotado?`<div style="font-size:0.7rem;color:#c0392b;font-weight:800;margin-top:4px;">AGOTADO</div>`:'';
+    const descHtml=p.descripcion?`<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.3;">${escapeHTML(p.descripcion)}</div>`:'';
+    return `<div class="card${agotado?' agotado':''}" onclick="openModal('zapas',${idx})"><div class="card-img-wrap"><span class="${tagCls}">${tag}</span><span class="card-brand-badge">${escapeHTML(p.marca||'')}</span>${img}</div><div class="card-body"><div class="card-title">${escapeHTML(p.nombre)}</div><div class="card-meta"><span>Basketball</span>${p.marca?`<span>\u00b7 ${escapeHTML(p.marca)}</span>`:''}</div>${priceBadge}${ofertaBadge}${agotadoBadge}${descHtml}<div class="card-sizes">${sizes}</div><div class="card-cta"><span>Consultar</span>${ARROWSVG}</div></div></div>`;
   }).join('');
+  renderSizeRowZapas();
 }
 
 function renderGaleria(){
