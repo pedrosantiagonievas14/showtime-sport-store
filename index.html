@@ -880,8 +880,8 @@ function searchProducts(){
   renderGridZapas();
 }
 
-function renderCustomGrid(products, titulo) {
-  const grid = document.querySelector(".products-grid");
+function renderCustomGrid(products, titulo, gridId) {
+  const grid = gridId ? document.getElementById(gridId) : document.querySelector(".products-grid");
   if (!grid) return;
 
   if (products.length === 0) {
@@ -957,7 +957,7 @@ function renderGridZapas() {
   else if(cat.indexOf('brand:')===0){ const b=cat.slice(6).toLowerCase(); products=products.filter(p=>(p.marca||'').toLowerCase()===b); }
   if(currentSizeZapas) products=products.filter(p=>Array.isArray(p.talles)&&p.talles.some(t=>String(t).replace(/us/i,'').trim()===currentSizeZapas));
   if(currentSearchZapas){ const q=currentSearchZapas.toLowerCase(); products=products.filter(p=>(p.nombre||'').toLowerCase().includes(q)||(p.marca||'').toLowerCase().includes(q)); }
-  renderCustomGrid(products, "Zapas de Stock");
+  renderCustomGrid(products, "Zapas de Stock", "gridZapas");
   renderSizeRowZapas();
 }
 
@@ -966,7 +966,7 @@ function renderGridLocal() {
   const cat = currentCatLocal || 'all';
   if(cat!=='all') products=products.filter(p=>p.categoria===cat);
   if(currentSearchLocal){ const q=currentSearchLocal.toLowerCase(); products=products.filter(p=>(p.nombre||'').toLowerCase().includes(q)); }
-  renderCustomGrid(products, "Local");
+  renderCustomGrid(products, "Local", "gridLocal");
 }
 
 function updateCategoryRow(products) {
