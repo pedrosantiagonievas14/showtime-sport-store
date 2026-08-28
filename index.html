@@ -217,14 +217,24 @@ header{position:sticky;top:0;z-index:100;background:rgba(242,237,228,0.88);backd
 .conf-cta-box p{color:var(--muted-2);font-size:1rem;max-width:440px;margin:0 auto 1.8rem;position:relative;line-height:1.55;}
 .conf-cta-box .btn-primary{position:relative;}
 .gallery-section{max-width:1320px;margin:0 auto;padding:1.5rem;}
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.8rem;margin-top:1.5rem;}
-.gallery-item{position:relative;aspect-ratio:4/5;background:var(--cream-2);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;}
-.gallery-item:hover img{transform:scale(1.05);}
+.gallery-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:76px;grid-auto-flow:dense;gap:0.9rem;margin-top:1.5rem;}
+.gallery-item{position:relative;grid-column:span 4;grid-row:span 5;background:var(--cream-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;isolation:isolate;}
+.gallery-item:nth-child(6n+1){grid-column:span 8;grid-row:span 6;}
+.gallery-item:nth-child(6n+2){grid-column:span 4;grid-row:span 6;}
+.gallery-item:nth-child(6n+4){grid-column:span 8;grid-row:span 5;}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.55s cubic-bezier(.2,.8,.2,1);}
+.gallery-item:hover img{transform:scale(1.055);}
+.gallery-item::after{content:'';position:absolute;inset:38% 0 0;background:linear-gradient(180deg,transparent,rgba(12,12,12,.9));z-index:1;pointer-events:none;}
+.gallery-item.image-missing::before{content:'Foto anterior no disponible · Volvé a cargarla desde el administrador';position:absolute;z-index:1;inset:1rem;display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:1.5;text-transform:uppercase;letter-spacing:.07em;border:1px dashed var(--line-strong);border-radius:12px;}
 .gallery-ph{text-align:center;color:var(--muted-2);padding:1rem;}
 .gallery-ph .big{font-family:'Archivo Black',sans-serif;font-size:2.6rem;color:var(--line-strong);line-height:1;margin-bottom:0.3rem;}
 .gallery-ph .sub{font-family:'JetBrains Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.12em;}
-.gallery-label{position:absolute;left:0;right:0;bottom:0;padding:1.6rem 1rem 0.9rem;background:linear-gradient(180deg,transparent,rgba(30,30,30,0.85));color:var(--cream);font-family:'Archivo',sans-serif;font-weight:600;font-size:0.82rem;}
+.gallery-label{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:3rem 1.25rem 1.15rem;color:var(--cream);font-family:'Archivo',sans-serif;}
+.gallery-index{position:absolute;z-index:2;top:1rem;left:1rem;background:var(--orange);color:#fff;border-radius:999px;padding:.35rem .55rem;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:800;letter-spacing:.08em;}
+.gallery-label h3{font-family:'Archivo Black',sans-serif;font-size:clamp(1.05rem,2vw,1.55rem);line-height:1.05;text-transform:uppercase;margin:0 0 .45rem;}
+.gallery-tags{display:flex;gap:.38rem;flex-wrap:wrap;margin-bottom:.45rem;}
+.gallery-tag{border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:.18rem .48rem;font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;}
+.gallery-desc{font-size:.78rem;line-height:1.4;color:rgba(255,255,255,.78);max-width:620px;}
 
 /* ━━━ LOCALES ━━━ */
 .locales{max-width:1320px;margin:0 auto;padding:3rem 1.5rem;}
@@ -358,6 +368,9 @@ footer{background:var(--ink);color:var(--cream);margin-top:2rem;}
   .stats-inner{grid-template-columns:1fr 1fr;gap:1.5rem 1rem;}
   .stat:nth-child(2){border-right:none;}
   .conf-features{grid-template-columns:1fr 1fr;}
+  .gallery-grid{grid-auto-rows:72px;}
+  .gallery-item,.gallery-item:nth-child(6n+2){grid-column:span 6;grid-row:span 5;}
+  .gallery-item:nth-child(6n+1),.gallery-item:nth-child(6n+4){grid-column:span 12;grid-row:span 5;}
   .footer-top{grid-template-columns:1fr;gap:2rem;}
   .toolbar{top:55px;}
 }
@@ -381,6 +394,12 @@ footer{background:var(--ink);color:var(--cream);margin-top:2rem;}
   .locales-grid{grid-template-columns:1fr;}
   .conf-features{grid-template-columns:1fr;padding:0 1rem;}
   .conf-cta-section{padding:2rem 1rem;}
+  .gallery-section{padding:1rem;}
+  .gallery-grid{grid-auto-rows:76px;gap:.75rem;}
+  .gallery-item,.gallery-item:nth-child(n){grid-column:span 12;grid-row:span 4;}
+  .gallery-item:nth-child(3n+1){grid-row:span 5;}
+  .gallery-label{padding:2.5rem 1rem 1rem;}
+  .gallery-desc{display:none;}
   .footer-inner{padding:2.5rem 1rem 1.5rem;}
   .footer-bottom{flex-direction:column;text-align:center;}
   .stats-inner{padding:1.8rem 1rem;}
@@ -1017,7 +1036,7 @@ function postToSheet(sheet, action, data, id, hard){
   try{ fetch(GOOGLE_APPS_SCRIPT_URL,{ method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({sheet,action,data:data||{},id:id,hard:!!hard}) }); }
   catch(e){ console.log('Error guardando en Sheets'); }
 }
-function syncSoon(){ setTimeout(loadFromSheets, 1800); }
+function syncSoon(delay){ setTimeout(loadFromSheets, delay||1800); }
 
 async function loadPricesFromSheet(){ return loadFromSheets(); }
 
@@ -1443,10 +1462,11 @@ function renderGaleria(){
     grid.innerHTML=Array.from({length:4},(_,i)=>`<div class="gallery-item"><div class="gallery-ph"><div class="big">0${i+1}</div><div class="sub">Pr\u00f3ximamente</div></div></div>`).join('');
     return;
   }
-  grid.innerHTML=items.map(g=>{
-    const sub=[g.club,g.disciplina].filter(Boolean).join(' \u00b7 ');
-    const label=(g.titulo||sub)?`<div class="gallery-label">${escapeHTML(g.titulo||'')}${sub?` <span style="opacity:.8;font-weight:500;">${escapeHTML(sub)}</span>`:''}</div>`:'';
-    return `<div class="gallery-item"><img src="${g.img}" alt="${escapeHTML(g.titulo||g.club||'Trabajo Showtime')}" loading="lazy">${label}</div>`;
+  grid.innerHTML=items.map((g,i)=>{
+    const titulo=g.titulo||g.club||'Trabajo Showtime';
+    const tags=[g.club,g.disciplina].filter(Boolean).map(v=>`<span class="gallery-tag">${escapeHTML(v)}</span>`).join('');
+    const desc=g.descripcion?`<p class="gallery-desc">${escapeHTML(g.descripcion)}</p>`:'';
+    return `<article class="gallery-item"><img src="${escapeHTML(g.img)}" alt="${escapeHTML(titulo)}" loading="lazy" onerror="this.parentElement.classList.add('image-missing');this.remove()"><span class="gallery-index">${String(i+1).padStart(2,'0')}</span><div class="gallery-label"><h3>${escapeHTML(titulo)}</h3>${tags?`<div class="gallery-tags">${tags}</div>`:''}${desc}</div></article>`;
   }).join('');
 }
 
@@ -1585,6 +1605,40 @@ function previewFile(input,prevId){
   if(f.size>1500000){ alert('Imagen muy grande (>1.5MB). Probá una más chica.'); input.value=''; return; }
   const r=new FileReader(); r.onload=e=>{ document.getElementById(prevId).innerHTML=`<img src="${e.target.result}">`; input.dataset.base64=e.target.result; }; r.readAsDataURL(f);
 }
+function prepareGalleryPhoto(input,prevId){
+  const f=input.files&&input.files[0]; if(!f) return;
+  const isJpg=/image\/jpeg/i.test(f.type)||/\.jpe?g$/i.test(f.name||'');
+  if(!isJpg){ alert('Para trabajos realizados, elegí una imagen JPG o JPEG.'); input.value=''; return; }
+  if(f.size>15000000){ alert('La foto supera los 15 MB. Elegí una imagen más liviana.'); input.value=''; return; }
+  const prev=document.getElementById(prevId);
+  prev.innerHTML='<span style="color:var(--muted);font-size:.82rem;">Preparando foto para Google Sheets…</span>';
+  const reader=new FileReader();
+  reader.onerror=()=>{ alert('No se pudo leer la imagen.'); input.value=''; };
+  reader.onload=e=>{
+    const source=new Image();
+    source.onerror=()=>{ alert('El JPG no pudo abrirse. Probá guardarlo nuevamente desde el celular.'); input.value=''; };
+    source.onload=()=>{
+      let maxSide=1100, quality=.84, result='';
+      const canvas=document.createElement('canvas'), ctx=canvas.getContext('2d',{alpha:false});
+      for(let attempt=0;attempt<18;attempt++){
+        const scale=Math.min(1,maxSide/Math.max(source.naturalWidth,source.naturalHeight));
+        canvas.width=Math.max(1,Math.round(source.naturalWidth*scale));
+        canvas.height=Math.max(1,Math.round(source.naturalHeight*scale));
+        ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(source,0,0,canvas.width,canvas.height);
+        result=canvas.toDataURL('image/jpeg',quality);
+        if(result.length<=42000) break;
+        if(quality>.42) quality-=.08; else { maxSide=Math.round(maxSide*.82); quality=.7; }
+      }
+      if(!result||result.length>47000){ alert('No se pudo reducir la foto lo suficiente para Google Sheets. Probá otra imagen.'); input.value=''; prev.innerHTML='<span style="color:var(--muted-2);font-size:.82rem;">Sin foto nueva</span>'; return; }
+      input.dataset.base64=result;
+      input.dataset.optimized='true';
+      prev.innerHTML=`<img src="${result}"><span style="display:block;margin-top:.4rem;color:var(--green);font-size:.72rem;">JPG listo para sincronizar</span>`;
+    };
+    source.src=e.target.result;
+  };
+  reader.readAsDataURL(f);
+}
 function saveLocal(idx){
   const gv=id=>{const e=document.getElementById(id);return e?String(e.value).trim():'';};
   const gc=id=>{const e=document.getElementById(id);return e?e.checked:false;};
@@ -1629,8 +1683,8 @@ function editGalleryItem(idx){
     <div class="field"><label>T\u00edtulo / Cliente</label><input type="text" id="fGalTit" value="${escapeHTML(g.titulo||'')}" placeholder="Club Bah\u00eda - Camisetas"></div>
     <div class="row2"><div class="field"><label>Club</label><input type="text" id="fGalClub" value="${escapeHTML(g.club||'')}"></div><div class="field"><label>Disciplina</label><input type="text" id="fGalDisc" value="${escapeHTML(g.disciplina||'')}" placeholder="F\u00fatbol..."></div></div>
     <div class="field"><label>Descripci\u00f3n</label><textarea id="fGalDesc" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(g.descripcion||'')}</textarea></div>
-    <div class="field"><label>Foto URL (recomendado)</label><input type="text" id="fGalUrl" value="${escapeHTML((g.img&&!String(g.img).startsWith('data:'))?g.img:'')}" placeholder="https://..."></div>
-    <div class="field"><label>...o subir archivo</label><input type="file" id="fGalFoto" accept="image/*" onchange="previewFile(this,'fGalPrev')"><div class="file-preview" id="fGalPrev">${g.img?`<img src="${g.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+    <div class="field"><label>Foto desde una URL (opcional)</label><input type="text" id="fGalUrl" value="${escapeHTML((g.img&&!String(g.img).startsWith('data:'))?g.img:'')}" placeholder="https://..."></div>
+    <div class="field"><label>O subir una foto JPG desde el celular o la computadora</label><input type="file" id="fGalFoto" accept=".jpg,.jpeg,image/jpeg" onchange="prepareGalleryPhoto(this,'fGalPrev')"><small style="display:block;margin-top:.35rem;color:var(--muted);line-height:1.4;">La página la reduce automáticamente para poder guardarla también en Google Sheets.</small><div class="file-preview" id="fGalPrev">${g.img?`<img src="${g.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
     <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveGallery(${idx})">${isNew?'Subir':'Guardar'}</button></div>`);
 }
 function saveGallery(idx){
@@ -1639,12 +1693,13 @@ function saveGallery(idx){
   const img=b64||url||ex;
   if(!img){alert('Falta la foto (sub\u00ed archivo o peg\u00e1 URL)');return;}
   const data={ id:idx>=0?galeria[idx].id:('tmp'+Date.now()), titulo:gv('fGalTit'), club:gv('fGalClub'), disciplina:gv('fGalDisc'), descripcion:gv('fGalDesc'), img, visible:true, fecha:(idx>=0&&galeria[idx].fecha)?galeria[idx].fecha:new Date().toISOString().slice(0,10) };
-  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); if(!imgSheet) showToast('\u26a0 Foto muy pesada: peg\u00e1 una URL para sincronizar'); }
+  let imgSheet=img;
+  if(img&&img.indexOf('data:')===0&&img.length>47000){ alert('La foto todavía es muy pesada para sincronizar. Volvé a elegirla para que se reduzca automáticamente.'); return; }
   const sd={Titulo:data.titulo,Club:data.club,Disciplina:data.disciplina,Imagen:imgSheet,Descripcion:data.descripcion,Fecha:data.fecha,Visible:true};
   if(idx>=0){ galeria[idx]=data; postToSheet('GALERIA','update',sd,data.id); } else { galeria.unshift(data); postToSheet('GALERIA','create',sd); }
-  saveData('galeria',galeria); closeAdminForm(); renderAdminTables(); renderGaleria(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Subido'); syncSoon();
+  saveData('galeria',galeria); closeAdminForm(); renderAdminTables(); renderGaleria(); showToast(idx>=0?'\u2713 Actualizado y sincronizando':'\u2713 JPG subido y sincronizando'); syncSoon(3800);
 }
-function deleteGalleryItem(idx){ if(!confirm('¿Eliminar esta foto?')) return; galeria.splice(idx,1); saveData('galeria',galeria); renderAdminTables(); renderGaleria(); showToast('🗑 Eliminado'); }
+function deleteGalleryItem(idx){ if(!confirm('¿Eliminar esta foto?')) return; const id=galeria[idx]&&galeria[idx].id; if(id) postToSheet('GALERIA','delete',{},id,true); galeria.splice(idx,1); saveData('galeria',galeria); renderAdminTables(); renderGaleria(); showToast('🗑 Eliminado'); syncSoon(3000); }
 function resetData(type){
   const m={local:'¿Restaurar productos del local a los originales?',zapas:'¿Restaurar zapatillas a las originales?',galeria:'¿Vaciar la galería?'};
   if(!confirm(m[type])) return;
