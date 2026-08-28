@@ -913,8 +913,9 @@ footer{background:var(--ink);color:var(--cream);margin-top:2rem;}
     <div class="admin-section" id="admin-banner">
       <div style="background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1.5rem;">
         <h3 style="font-family:'Archivo Black';font-size:1.1rem;text-transform:uppercase;margin-bottom:0.3rem;">Banner de portada</h3>
-        <p style="color:var(--ink-soft);font-size:0.88rem;margin-bottom:1.2rem;">Pegá el link de una foto o un video para el socalo de la home. Se sincroniza solo, no hace falta subir el HTML de nuevo.</p>
-        <div class="field"><label>Link (foto o video)</label><input type="text" id="fBannerUrl" placeholder="https://..."></div>
+        <p style="color:var(--ink-soft);font-size:0.88rem;margin-bottom:1.2rem;">Subí una foto JPG desde el celular o pegá el enlace de una foto o video. Se sincroniza con Google Sheets.</p>
+        <div class="field"><label>Foto JPG desde el celular o la computadora</label><input type="file" id="fBannerFoto" accept=".jpg,.jpeg,image/jpeg" onchange="prepareSyncedPhoto(this,'bannerPreview')"><small style="display:block;margin-top:.35rem;color:var(--muted);line-height:1.4;">La foto se reduce automáticamente para poder guardarse en Google Sheets.</small></div>
+        <div class="field"><label>O pegar un enlace de foto o video</label><input type="text" id="fBannerUrl" placeholder="https://..."></div>
         <div class="field"><label>Tipo</label>
           <select id="fBannerTipo">
             <option value="imagen">Foto</option>
@@ -934,8 +935,8 @@ footer{background:var(--ink);color:var(--cream);margin-top:2rem;}
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Local:</strong> productos en stock de tus locales. Editá nombre, talles, categoría, marca y foto.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Zapatillas:</strong> zapas de básquet. "Stock" aparecen primero, "a pedido" se traen de USA.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Galería:</strong> fotos de uniformes que hiciste, aparecen en Confección.</p>
-        <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Banner:</strong> foto o video del socalo de la home. Pegá el link y listo, se sincroniza en todos los dispositivos.</p>
-        <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Importante:</strong> los cambios se guardan en este navegador. Para que todos los vean hay que actualizar el archivo HTML.</p>
+        <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Banner:</strong> subí una foto JPG o pegá el enlace de una foto o video.</p>
+        <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Imágenes:</strong> los JPG de Local, Zapatillas, Galería y Banner se reducen automáticamente y se sincronizan con Google Sheets.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Acceso:</strong> tocá el logo 5 veces seguidas.</p>
         <p><strong style="color:var(--orange);">Cambiar clave:</strong> editá <code style="background:var(--cream);padding:0.1rem 0.4rem;border-radius:4px;">const ADMIN_PASS</code> en el código.</p>
       </div>
@@ -1003,20 +1004,24 @@ function applyBanner(){
 }
 function saveBanner(){
   const url=String(document.getElementById('fBannerUrl').value||'').trim();
-  const tipo=document.getElementById('fBannerTipo').value;
-  if(!url){ alert('Pegá un link primero'); return; }
-  const data={ id: (siteBanner&&siteBanner.id)?siteBanner.id:('tmp'+Date.now()), url, tipo, visible:true };
-  const sd={Url:url,Tipo:tipo,Visible:true};
+  const fileInput=document.getElementById('fBannerFoto');
+  const b64=fileInput&&fileInput.dataset.base64;
+  const finalUrl=b64||url||(siteBanner&&siteBanner.url)||'';
+  const tipo=b64?'imagen':document.getElementById('fBannerTipo').value;
+  if(!finalUrl){ alert('Subí una foto JPG o pegá un enlace'); return; }
+  if(finalUrl.indexOf('data:')===0&&finalUrl.length>47000){ alert('La foto todavía es muy pesada para Google Sheets. Volvé a elegirla.'); return; }
+  const data={ id: (siteBanner&&siteBanner.id)?siteBanner.id:('tmp'+Date.now()), url:finalUrl, tipo, visible:true };
+  const sd={Url:finalUrl,Tipo:tipo,Visible:true};
   if(siteBanner&&siteBanner.id) postToSheet('BANNER','update',sd,siteBanner.id); else postToSheet('BANNER','create',sd);
-  siteBanner=data; applyBanner(); showToast('✓ Banner actualizado'); syncSoon();
+  siteBanner=data; applyBanner(); fillBannerForm(); showToast('✓ Banner actualizado y sincronizando'); syncSoon(3800);
 }
 function resetBanner(){
   if(!confirm('¿Volver al video original de la home?')) return;
   if(siteBanner&&siteBanner.id) postToSheet('BANNER','delete',{},siteBanner.id,true);
   siteBanner=null; applyBanner();
-  const u=document.getElementById('fBannerUrl'); if(u) u.value='';
+  fillBannerForm();
   showToast('✓ Banner restaurado');
-  syncSoon();
+  syncSoon(3000);
 }
 async function loadFromSheets(){
   try{
@@ -1518,9 +1523,10 @@ document.querySelectorAll('.admin-tab').forEach(tab=>tab.addEventListener('click
   if(tab.dataset.section==='banner') fillBannerForm();
 }));
 function fillBannerForm(){
-  const u=document.getElementById('fBannerUrl'), t=document.getElementById('fBannerTipo'), p=document.getElementById('bannerPreview');
-  if(u) u.value = siteBanner?siteBanner.url:'';
+  const u=document.getElementById('fBannerUrl'), t=document.getElementById('fBannerTipo'), p=document.getElementById('bannerPreview'), f=document.getElementById('fBannerFoto');
+  if(u) u.value = siteBanner&&siteBanner.url&&!String(siteBanner.url).startsWith('data:')?siteBanner.url:'';
   if(t) t.value = siteBanner?siteBanner.tipo:'imagen';
+  if(f){ f.value=''; delete f.dataset.base64; }
   if(p) p.innerHTML = siteBanner&&siteBanner.url ? `<div style="font-size:0.82rem;color:var(--muted-2);margin-bottom:0.4rem;">Banner actual:</div>${siteBanner.tipo==='video'?`<video src="${siteBanner.url}" style="width:100%;max-width:320px;border-radius:8px;" muted autoplay loop playsinline></video>`:`<img src="${siteBanner.url}" style="width:100%;max-width:320px;border-radius:8px;">`}` : `<div style="font-size:0.82rem;color:var(--muted-2);">Sin banner personalizado — se muestra el video por defecto.</div>`;
 }
 document.getElementById('adminSearchLocal').addEventListener('input',renderAdminTableLocal);
@@ -1583,7 +1589,7 @@ function editProduct(type,idx){
       <div class="row2"><div class="field"><label>Stock</label><input type="number" id="fStock" value="${num(p.stock)}" placeholder="(vacío = sin control)"></div><div class="field"><label>&nbsp;</label><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;;height:42px;"><input type="checkbox" id="fOfertaActiva" ${p.oferta?'checked':''} style="width:auto;"> Oferta activa</label></div></div>
       <div class="field"><label>Descripción</label><textarea id="fDescripcion" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(p.descripcion||'')}</textarea></div>
       <div class="row2"><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fDestacado" ${p.destacado?'checked':''} style="width:auto;"> Destacado</label></div><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fVisible" ${p.visible!==false?'checked':''} style="width:auto;"> Visible</label></div></div>
-      <div class="field"><label>Foto URL (recomendado)</label><input type="text" id="fImgUrl" value="${escapeHTML((p.img&&!String(p.img).startsWith('data:'))?p.img:'')}" placeholder="https://..."><input type="file" id="fFoto" accept="image/*" onchange="previewFile(this,'fPrev')" style="margin-top:0.4rem;"><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+      <div class="field"><label>Foto JPG desde el celular o URL</label><input type="text" id="fImgUrl" value="${escapeHTML((p.img&&!String(p.img).startsWith('data:'))?p.img:'')}" placeholder="https://... (opcional)"><input type="file" id="fFoto" accept=".jpg,.jpeg,image/jpeg" onchange="prepareSyncedPhoto(this,'fPrev')" style="margin-top:0.4rem;"><small style="display:block;margin-top:.35rem;color:var(--muted);">El JPG se reduce y sincroniza automáticamente.</small><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
       <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveLocal(${idx})">${isNew?'Agregar':'Guardar'}</button></div>`);
   } else {
     openAdminForm(`<h3>${isNew?'Agregar zapatilla':'Editar zapatilla'}</h3>
@@ -1596,7 +1602,7 @@ function editProduct(type,idx){
       <div class="field"><label>Descripción</label><textarea id="fDescripcion" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(p.descripcion||'')}</textarea></div>
       <div class="row2"><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fDestacado" ${p.destacado?'checked':''} style="width:auto;"> Destacado</label></div><div class="field"><label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="fVisible" ${p.visible!==false?'checked':''} style="width:auto;"> Visible</label></div></div>
       <div class="field"><label>Slug (URL, opcional)</label><input type="text" id="fSlug" value="${escapeHTML(p.slug||'')}" placeholder="se genera solo"></div>
-      <div class="field"><label>Foto URL o subir</label><input type="text" id="fImgUrl" value="${escapeHTML((p.img&&!String(p.img).startsWith('data:'))?p.img:'')}" placeholder="https://..."><input type="file" id="fFoto" accept="image/*" onchange="previewFile(this,'fPrev')" style="margin-top:0.4rem;"><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+      <div class="field"><label>Foto JPG desde el celular o URL</label><input type="text" id="fImgUrl" value="${escapeHTML((p.img&&!String(p.img).startsWith('data:'))?p.img:'')}" placeholder="https://... (opcional)"><input type="file" id="fFoto" accept=".jpg,.jpeg,image/jpeg" onchange="prepareSyncedPhoto(this,'fPrev')" style="margin-top:0.4rem;"><small style="display:block;margin-top:.35rem;color:var(--muted);">El JPG se reduce y sincroniza automáticamente.</small><div class="file-preview" id="fPrev">${p.img?`<img src="${p.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
       <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveZapa(${idx})">${isNew?'Agregar':'Guardar'}</button></div>`);
   }
 }
@@ -1605,10 +1611,10 @@ function previewFile(input,prevId){
   if(f.size>1500000){ alert('Imagen muy grande (>1.5MB). Probá una más chica.'); input.value=''; return; }
   const r=new FileReader(); r.onload=e=>{ document.getElementById(prevId).innerHTML=`<img src="${e.target.result}">`; input.dataset.base64=e.target.result; }; r.readAsDataURL(f);
 }
-function prepareGalleryPhoto(input,prevId){
+function prepareSyncedPhoto(input,prevId){
   const f=input.files&&input.files[0]; if(!f) return;
   const isJpg=/image\/jpeg/i.test(f.type)||/\.jpe?g$/i.test(f.name||'');
-  if(!isJpg){ alert('Para trabajos realizados, elegí una imagen JPG o JPEG.'); input.value=''; return; }
+  if(!isJpg){ alert('Elegí una imagen JPG o JPEG.'); input.value=''; return; }
   if(f.size>15000000){ alert('La foto supera los 15 MB. Elegí una imagen más liviana.'); input.value=''; return; }
   const prev=document.getElementById(prevId);
   prev.innerHTML='<span style="color:var(--muted);font-size:.82rem;">Preparando foto para Google Sheets…</span>';
@@ -1633,7 +1639,7 @@ function prepareGalleryPhoto(input,prevId){
       if(!result||result.length>47000){ alert('No se pudo reducir la foto lo suficiente para Google Sheets. Probá otra imagen.'); input.value=''; prev.innerHTML='<span style="color:var(--muted-2);font-size:.82rem;">Sin foto nueva</span>'; return; }
       input.dataset.base64=result;
       input.dataset.optimized='true';
-      prev.innerHTML=`<img src="${result}"><span style="display:block;margin-top:.4rem;color:var(--green);font-size:.72rem;">JPG listo para sincronizar</span>`;
+      prev.innerHTML=`<img src="${result}" style="max-width:100%;max-height:180px;object-fit:contain;"><span style="display:block;margin-top:.4rem;color:var(--green);font-size:.72rem;">JPG listo para sincronizar</span>`;
     };
     source.src=e.target.result;
   };
@@ -1647,10 +1653,10 @@ function saveLocal(idx){
   const img=b64||url||ex||'';
   let slug=nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
   const data={ id: idx>=0?productosLocal[idx].id:('tmp'+Date.now()), nombre, categoria:document.getElementById('fCategoria').value, marca:'', deporte:'', talles:gv('fTalles').split(',').map(s=>s.trim()).filter(Boolean), img, precioOriginal:gv('fPrecioOrig'), precioOferta:gv('fPrecioOferta'), precio:(gv('fPrecioOferta')||gv('fPrecioOrig')), oferta:gc('fOfertaActiva'), stock:gv('fStock'), descripcion:gv('fDescripcion'), destacado:gc('fDestacado'), visible:gc('fVisible'), slug };
-  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); }
+  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>47000){ alert('La foto todavía es muy pesada para Google Sheets. Volvé a elegirla.'); return; }
   const sd={Nombre:nombre,Categoria:data.categoria,Talle:(data.talles||[]).join(', '),Imagen:imgSheet,Precio_Original:data.precioOriginal,Precio_Oferta:data.precioOferta,Oferta_Activa:data.oferta,Descripcion:data.descripcion,Stock:data.stock,Destacado:data.destacado,Visible:data.visible,Slug:slug};
   if(idx>=0){ productosLocal[idx]=data; if(data.id) postToSheet('LOCAL','update',sd,data.id); else postToSheet('LOCAL','create',sd); } else { productosLocal.unshift(data); postToSheet('LOCAL','create',sd); }
-  saveData('local',productosLocal); closeAdminForm(); renderAdminTables(); renderCatRowLocal(); renderGridLocal(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Agregado'); syncSoon();
+  saveData('local',productosLocal); closeAdminForm(); renderAdminTables(); renderCatRowLocal(); renderGridLocal(); showToast(idx>=0?'\u2713 Actualizado y sincronizando':'\u2713 Agregado y sincronizando'); syncSoon(3800);
 }
 function saveZapa(idx){
   const gv=id=>{const e=document.getElementById(id);return e?String(e.value).trim():'';};
@@ -1661,10 +1667,10 @@ function saveZapa(idx){
   const talles=gv('fTalles').split(',').map(s=>s.trim()).filter(Boolean);
   let slug=gv('fSlug')||nombre.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
   const data={ id: idx>=0?zapas[idx].id:('tmp'+Date.now()), nombre, marca:gv('fMarca')||'Nike', modelo:gv('fModelo'), section:document.getElementById('fSection').value, genero:gv('fGenero'), talles, img, precioOriginal:gv('fPrecioOrig'), precioOferta:gv('fPrecioOferta'), precio:(gv('fPrecioOferta')||gv('fPrecioOrig')), oferta:gc('fOfertaActiva'), stock:gv('fStock'), descripcion:gv('fDescripcion'), destacado:gc('fDestacado'), visible:gc('fVisible'), slug };
-  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>45000){ imgSheet=(url||ex||''); }
+  let imgSheet=img; if(img&&img.indexOf('data:')===0&&img.length>47000){ alert('La foto todavía es muy pesada para Google Sheets. Volvé a elegirla.'); return; }
   const sd={Nombre:nombre,Marca:data.marca,Modelo:data.modelo,Talle:talles.join(', '),Categoria:data.section,Genero:data.genero,Imagen:imgSheet,Precio_Original:data.precioOriginal,Precio_Oferta:data.precioOferta,Oferta_Activa:data.oferta,Stock:data.stock,Descripcion:data.descripcion,Destacado:data.destacado,Visible:data.visible,Slug:slug};
   if(idx>=0){ zapas[idx]=data; postToSheet('ZAPATILLAS','update',sd,data.id); } else { zapas.unshift(data); postToSheet('ZAPATILLAS','create',sd); }
-  saveData('zapas',zapas); closeAdminForm(); renderAdminTables(); renderCatRowZapas(); renderGridZapas(); showToast(idx>=0?'\u2713 Actualizado':'\u2713 Agregado'); syncSoon();
+  saveData('zapas',zapas); closeAdminForm(); renderAdminTables(); renderCatRowZapas(); renderGridZapas(); showToast(idx>=0?'\u2713 Actualizada y sincronizando':'\u2713 Agregada y sincronizando'); syncSoon(3800);
 }
 function deleteProduct(type,idx){
   if(!confirm('\u00bfEliminar este producto?')) return;
@@ -1684,7 +1690,7 @@ function editGalleryItem(idx){
     <div class="row2"><div class="field"><label>Club</label><input type="text" id="fGalClub" value="${escapeHTML(g.club||'')}"></div><div class="field"><label>Disciplina</label><input type="text" id="fGalDisc" value="${escapeHTML(g.disciplina||'')}" placeholder="F\u00fatbol..."></div></div>
     <div class="field"><label>Descripci\u00f3n</label><textarea id="fGalDesc" rows="2" style="width:100%;font-family:inherit;font-size:.9rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;">${escapeHTML(g.descripcion||'')}</textarea></div>
     <div class="field"><label>Foto desde una URL (opcional)</label><input type="text" id="fGalUrl" value="${escapeHTML((g.img&&!String(g.img).startsWith('data:'))?g.img:'')}" placeholder="https://..."></div>
-    <div class="field"><label>O subir una foto JPG desde el celular o la computadora</label><input type="file" id="fGalFoto" accept=".jpg,.jpeg,image/jpeg" onchange="prepareGalleryPhoto(this,'fGalPrev')"><small style="display:block;margin-top:.35rem;color:var(--muted);line-height:1.4;">La página la reduce automáticamente para poder guardarla también en Google Sheets.</small><div class="file-preview" id="fGalPrev">${g.img?`<img src="${g.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
+    <div class="field"><label>O subir una foto JPG desde el celular o la computadora</label><input type="file" id="fGalFoto" accept=".jpg,.jpeg,image/jpeg" onchange="prepareSyncedPhoto(this,'fGalPrev')"><small style="display:block;margin-top:.35rem;color:var(--muted);line-height:1.4;">La página la reduce automáticamente para poder guardarla también en Google Sheets.</small><div class="file-preview" id="fGalPrev">${g.img?`<img src="${g.img}">`:'<span style="color:var(--muted-2);font-size:0.82rem;">Sin foto</span>'}</div></div>
     <div class="actions"><button class="af-secondary" onclick="closeAdminForm()">Cancelar</button><button class="af-primary" onclick="saveGallery(${idx})">${isNew?'Subir':'Guardar'}</button></div>`);
 }
 function saveGallery(idx){
