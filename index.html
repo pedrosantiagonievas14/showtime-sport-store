@@ -995,7 +995,7 @@ footer{background:var(--ink);color:var(--cream);margin-top:2rem;}
         <h3 style="font-family:'Archivo Black';font-size:1.3rem;text-transform:uppercase;margin-bottom:1rem;">Cómo usar el panel</h3>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Local:</strong> productos en stock de tus locales. Editá nombre, talles, categoría, marca y foto.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Zapatillas:</strong> zapas de básquet. "Stock" aparecen primero, "a pedido" se traen de USA.</p>
-        <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Promos:</strong> editá un producto de Local o Zapatillas, completá precio original y precio oferta, y marcá “Oferta activa”. La foto JPG y los precios aparecerán automáticamente en Promos.</p>
+        <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Promos:</strong> cualquier producto con precio y “Oferta activa” aparece automáticamente. Si además completás precio original y precio oferta, también muestra el porcentaje y el ahorro.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Galería:</strong> fotos de uniformes que hiciste, aparecen en Confección.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Banner:</strong> subí una foto JPG o pegá el enlace de una foto o video.</p>
         <p style="margin-bottom:0.7rem;"><strong style="color:var(--orange);">Imágenes:</strong> elegí un JPG en Local, Zapatillas, Galería o Banner. Esperá hasta ver “✓ JPG listo” y recién entonces tocá Guardar; la imagen reducida se sincroniza con Google Sheets.</p>
@@ -1375,6 +1375,7 @@ async function savePriceToSheet(type,idx){
     if(!item) return;
     const payload=[{type,nombre:item.nombre,precio:item.precio||'',oferta:item.oferta||false}];
     await fetch(SHEET_SYNC_URL,{method:'POST',payload:JSON.stringify(payload)});
+    renderPromos();
   }catch(e){ console.log('Error sincronizando precio'); }
 }
 
@@ -1439,12 +1440,14 @@ function renderGridLocal(){
     const img=p.img?`<img class="card-img" src="${p.img}" alt="${escapeHTML(p.nombre)}">`:`<div class="card-placeholder">${cat.icon}</div>`;
     const pOrig=Number(String(p.precioOriginal||'').replace(/[^\d.-]/g,''))||0;
     const pOf=Number(String(p.precioOferta||'').replace(/[^\d.-]/g,''))||0;
-    const enOferta=p.oferta&&pOf>0&&pOrig>0&&pOf<pOrig;
+    const pActual=pOf>0?pOf:(pOrig>0?pOrig:(Number(String(p.precio||'').replace(/[^\d.-]/g,''))||0));
+    const conDescuento=pOf>0&&pOrig>0&&pOf<pOrig;
+    const enOferta=p.oferta&&pActual>0;
     const stockNum=(p.stock===''||p.stock==null)?null:Number(p.stock);
     const agotado=stockNum===0;
     let priceBadge='';
-    if(enOferta){ priceBadge=`<div style="margin-top:6px;"><span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span> <strong style="color:var(--orange);font-size:0.95rem;">${fmtPrecio(pOf)}</strong><div style="font-size:0.7rem;color:var(--orange);font-weight:700;">Ahorr\u00e1s ${fmtPrecio(pOrig-pOf)}</div></div>`; }
-    else { const base=pOf>0?pOf:pOrig; if(base>0) priceBadge=`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">${fmtPrecio(base)}</div>`; }
+    if(conDescuento){ priceBadge=`<div style="margin-top:6px;"><span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span> <strong style="color:var(--orange);font-size:0.95rem;">${fmtPrecio(pOf)}</strong><div style="font-size:0.7rem;color:var(--orange);font-weight:700;">Ahorr\u00e1s ${fmtPrecio(pOrig-pOf)}</div></div>`; }
+    else if(pActual>0) priceBadge=`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">${fmtPrecio(pActual)}</div>`;
     const ofertaBadge=enOferta?`<span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;">OFERTA</span>`:'';
     const agotadoBadge=agotado?`<div style="font-size:0.7rem;color:#c0392b;font-weight:800;margin-top:4px;">AGOTADO</div>`:'';
     const descHtml=p.descripcion?`<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.3;">${escapeHTML(p.descripcion)}</div>`:'';
@@ -1511,12 +1514,14 @@ function renderGridZapas(){
     const img=p.img?`<img class="card-img" src="${p.img}" alt="${escapeHTML(p.nombre)}" loading="lazy" style="mix-blend-mode:normal;">`:`<div class="card-placeholder">\ud83d\udc5f</div>`;
     const pOrig=Number(String(p.precioOriginal||'').replace(/[^\d.-]/g,''))||0;
     const pOf=Number(String(p.precioOferta||'').replace(/[^\d.-]/g,''))||0;
-    const enOferta=p.oferta&&pOf>0&&pOrig>0&&pOf<pOrig;
+    const pActual=pOf>0?pOf:(pOrig>0?pOrig:(Number(String(p.precio||'').replace(/[^\d.-]/g,''))||0));
+    const conDescuento=pOf>0&&pOrig>0&&pOf<pOrig;
+    const enOferta=p.oferta&&pActual>0;
     const stockNum=(p.stock===''||p.stock==null)?null:Number(p.stock);
     const agotado=stockNum===0;
     let priceBadge='';
-    if(enOferta){ priceBadge=`<div style="margin-top:6px;"><span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span> <strong style="color:var(--orange);font-size:0.95rem;">${fmtPrecio(pOf)}</strong><div style="font-size:0.7rem;color:var(--orange);font-weight:700;">Ahorr\u00e1s ${fmtPrecio(pOrig-pOf)}</div></div>`; }
-    else { const base=pOf>0?pOf:pOrig; if(base>0) priceBadge=`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">${fmtPrecio(base)}</div>`; }
+    if(conDescuento){ priceBadge=`<div style="margin-top:6px;"><span style="text-decoration:line-through;color:var(--muted-2);font-size:0.82rem;">${fmtPrecio(pOrig)}</span> <strong style="color:var(--orange);font-size:0.95rem;">${fmtPrecio(pOf)}</strong><div style="font-size:0.7rem;color:var(--orange);font-weight:700;">Ahorr\u00e1s ${fmtPrecio(pOrig-pOf)}</div></div>`; }
+    else if(pActual>0) priceBadge=`<div style="font-weight:600;color:var(--orange);margin-top:6px;font-size:0.9rem;">${fmtPrecio(pActual)}</div>`;
     const ofertaBadge=enOferta?`<span style="display:inline-block;background:var(--orange);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;">OFERTA</span>`:'';
     const agotadoBadge=agotado?`<div style="font-size:0.7rem;color:#c0392b;font-weight:800;margin-top:4px;">AGOTADO</div>`:'';
     const descHtml=p.descripcion?`<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;line-height:1.3;">${escapeHTML(p.descripcion)}</div>`:'';
@@ -1533,16 +1538,19 @@ function renderPromos(){
   const collect=(arr,type)=>arr.forEach((p,idx)=>{
     const original=Number(String(p.precioOriginal||'').replace(/[^\d.-]/g,''))||0;
     const oferta=Number(String(p.precioOferta||'').replace(/[^\d.-]/g,''))||0;
-    if(p.visible!==false&&p.oferta===true&&original>0&&oferta>0&&oferta<original){
-      promos.push({p,type,idx,original,oferta,ahorro:original-oferta,porcentaje:Math.round((original-oferta)*100/original)});
+    const precioGuardado=Number(String(p.precio||'').replace(/[^\d.-]/g,''))||0;
+    const actual=oferta>0?oferta:(original>0?original:precioGuardado);
+    const conDescuento=oferta>0&&original>0&&oferta<original;
+    if(p.visible!==false&&p.oferta===true&&actual>0){
+      promos.push({p,type,idx,original,oferta,actual,conDescuento,ahorro:conDescuento?original-oferta:0,porcentaje:conDescuento?Math.round((original-oferta)*100/original):0});
     }
   });
   collect(productosLocal,'local');
   collect(zapas,'zapas');
-  promos.sort((a,b)=>b.porcentaje-a.porcentaje||b.ahorro-a.ahorro);
+  promos.sort((a,b)=>Number(b.conDescuento)-Number(a.conDescuento)||b.porcentaje-a.porcentaje||String(a.p.nombre).localeCompare(String(b.p.nombre),'es'));
   if(summary) summary.textContent=promos.length?`${promos.length} promo${promos.length===1?'':'s'} activa${promos.length===1?'':'s'} · precios a la vista`:'Nuevas promos próximamente';
   if(!promos.length){
-    grid.innerHTML=`<div class="promo-empty"><h3>Próximamente nuevas promos</h3><p>Desde el panel de administración, editá un producto, cargá una foto JPG, completá “Precio original” y “Precio oferta”, y activá la casilla “Oferta activa”. Se publicará acá automáticamente.</p></div>`;
+    grid.innerHTML=`<div class="promo-empty"><h3>Próximamente nuevas promos</h3><p>Desde el panel de administración, asegurate de que el producto tenga un precio y activá la casilla “Oferta activa”. Se publicará acá automáticamente.</p></div>`;
     return;
   }
   grid.innerHTML=promos.map(x=>{
@@ -1554,7 +1562,9 @@ function renderPromos(){
     const stockNum=(p.stock===''||p.stock==null)?null:Number(p.stock);
     const agotado=stockNum===0;
     const talles=Array.isArray(p.talles)&&p.talles.length?p.talles.slice(0,5).map(t=>`<span class="size-pill">${escapeHTML(t)}</span>`).join(''):'';
-    return `<article class="card promo-card${agotado?' agotado':''}" onclick="openModal('${x.type}',${x.idx})"><div class="card-img-wrap"><span class="promo-percent">-${x.porcentaje}%</span>${img}</div><div class="card-body"><div class="promo-source">${escapeHTML(origen)}</div><div class="card-title">${escapeHTML(p.nombre)}</div><div class="promo-price"><span class="promo-price-old">${fmtPrecio(x.original)}</span><span class="promo-price-now">${fmtPrecio(x.oferta)}</span></div><div class="promo-saving">Ahorrás ${fmtPrecio(x.ahorro)}</div>${agotado?'<div style="font-size:.7rem;color:#c0392b;font-weight:800;margin-top:.45rem;">AGOTADO · CONSULTANOS</div>':''}${talles?`<div class="card-sizes">${talles}</div>`:''}<button class="promo-consult" type="button">Ver y consultar promo</button></div></article>`;
+    const promoPill=x.conDescuento?`-${x.porcentaje}%`:'OFERTA';
+    const priceHtml=x.conDescuento?`<div class="promo-price"><span class="promo-price-old">${fmtPrecio(x.original)}</span><span class="promo-price-now">${fmtPrecio(x.oferta)}</span></div><div class="promo-saving">Ahorrás ${fmtPrecio(x.ahorro)}</div>`:`<div class="promo-price"><span class="promo-price-now">${fmtPrecio(x.actual)}</span></div><div class="promo-saving">Precio especial</div>`;
+    return `<article class="card promo-card${agotado?' agotado':''}" onclick="openModal('${x.type}',${x.idx})"><div class="card-img-wrap"><span class="promo-percent">${promoPill}</span>${img}</div><div class="card-body"><div class="promo-source">${escapeHTML(origen)}</div><div class="card-title">${escapeHTML(p.nombre)}</div>${priceHtml}${agotado?'<div style="font-size:.7rem;color:#c0392b;font-weight:800;margin-top:.45rem;">AGOTADO · CONSULTANOS</div>':''}${talles?`<div class="card-sizes">${talles}</div>`:''}<button class="promo-consult" type="button">Ver y consultar promo</button></div></article>`;
   }).join('');
 }
 
