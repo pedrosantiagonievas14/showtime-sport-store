@@ -1547,7 +1547,7 @@ function productImages(p){
  let extra=p.imagenes||p.Imagenes||[];
  if(typeof extra==='string'){try{extra=JSON.parse(extra)}catch(e){extra=extra.split(/[\n|]/)}}
  if(!Array.isArray(extra))extra=[];
- return [...new Set([p.img,p.Imagen,...extra,p.Imagen_2,p.Imagen_3,p.Imagen_4,p.Imagen_5].filter(x=>typeof x==='string'&&/^https?:\/\//i.test(x.trim())).map(x=>x.trim()))].slice(0,5);
+ return [...new Set([p.img,p.Imagen,...extra,p.Imagen_2,p.Imagen_3,p.Imagen_4,p.Imagen_5].filter(x=>typeof x==='string'&&/^(https?:\/\/|data:image\/(jpeg|png|webp);base64,)/i.test(x.trim())).map(x=>x.trim()))].slice(0,5);
 }
 function renderGridEtnia(){
   const q=document.getElementById('searchEtnia').value.toLowerCase().trim();
