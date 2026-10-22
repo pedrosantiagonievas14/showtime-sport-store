@@ -1532,16 +1532,7 @@ function sendCartToWhatsApp(){
 let toastT=null;
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2400); }
 
-renderCart();
-renderCatRowLocal(); renderGridLocal();
-renderCatRowZapas(); renderGridZapas();
-renderGridConfeccion(); renderPromos(); renderGaleria(); initHomeCarousel(); initViewFromURL();
-loadFromSheets();
-setInterval(()=>{if(!document.hidden&&!document.getElementById('photoAdmin').classList.contains('show')) loadFromSheets();},60000);
 
-</script>
-
-<script>
 function isEtnia(p){ return /(^|[^a-z])etnia([^a-z]|$)/i.test([p.marca,p.categoria,p.nombre].join(' ')); }
 function productImages(p){
  let extra=p.imagenes||p.Imagenes||[];
@@ -1586,5 +1577,15 @@ openModal=function(type,idx){
  target.after(bar);
 };
 renderGridEtnia();
-</script></body>
+
+renderCart();
+renderCatRowLocal(); renderGridLocal();
+renderCatRowZapas(); renderGridZapas();
+renderGridConfeccion(); renderPromos(); renderGaleria(); initHomeCarousel(); initViewFromURL();
+loadFromSheets();
+setInterval(()=>{if(!document.hidden&&!document.getElementById('photoAdmin').classList.contains('show')) loadFromSheets();},60000);
+
+</script>
+
+</body>
 </html>
