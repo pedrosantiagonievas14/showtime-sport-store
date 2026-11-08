@@ -1,0 +1,74 @@
+/* Portada, catálogo y fichas de Showtime */
+.shoe-hero{display:grid;min-height:350px;background:#181818;color:#fff}
+.shoe-hero-copy{display:grid;align-content:center;justify-items:start;gap:1rem;padding:clamp(1.7rem,5vw,5.5rem)}
+.shoe-hero h1{font-size:clamp(3rem,7.3vw,7rem);letter-spacing:-.065em;font-weight:900;line-height:.93;margin:0;max-width:9ch;text-transform:uppercase}
+.shoe-hero p{color:#e1e1e1;max-width:33ch;font-size:clamp(1rem,1.8vw,1.3rem);line-height:1.45;margin:0}
+.shoe-actions{display:flex;flex-wrap:wrap;gap:.55rem;margin:.7rem 0}
+.shoe-action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem 1rem;font:inherit;font-weight:700;text-decoration:none;border:1px solid currentColor;background:transparent;color:inherit;border-radius:.35rem;cursor:pointer}
+.shoe-primary{color:#181818;background:#ff8b39;border-color:#ff8b39}
+.shoe-hero-photo{min-height:240px;position:relative;width:100%;height:100%;border:0;background:#ebe8e1;color:#1b1b1b;padding:0;cursor:pointer}
+.shoe-hero-photo img{position:relative;display:block;width:100%;height:100%;max-height:490px;object-fit:contain;padding:clamp(.5rem,2vw,1.5rem)}
+.shoe-hero-caption{position:absolute;bottom:1rem;left:1rem;background:white;border-radius:.35rem;padding:.55rem .75rem;font-weight:750;max-width:calc(100% - 2rem)}
+.shoe-hero:has(.shoe-hero-photo[hidden]){grid-template-columns:1fr}
+.shoe-section{max-width:1380px;margin:auto;padding:clamp(1rem,4vw,2.5rem)}
+.shoe-section h2,.shoe-usa h2{margin:0 0 .65rem;font-size:clamp(1.5rem,4vw,2.6rem);letter-spacing:-.045em}
+.shoe-feature-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+.shoe-feature-list button{border:1px solid #cbc5bb;border-radius:.45rem;background:#fff;text-align:left;font:inherit;cursor:pointer;padding:.45rem}
+.shoe-feature-list img{width:100%;aspect-ratio:4/3;object-fit:contain;background:#efebe6}
+.shoe-feature-list strong{display:block;padding:.3rem}
+#view-zapas .view-hero{min-height:0;height:auto;background:#181818}
+#view-zapas .view-hero-content{position:relative;max-width:1350px;margin:auto;padding:clamp(1.8rem,4vw,4rem) 1.25rem}
+#view-zapas .view-hero-content h1{font-size:clamp(2.6rem,6vw,5rem);letter-spacing:-.05em;margin:0 0 .6rem}
+#view-zapas .view-hero-content p{margin:0}
+.shoe-filters{border:1px solid #a9a29a;border-radius:.4rem;padding:.6rem .8rem;margin:.7rem 0}
+.shoe-filters summary,.shoe-details summary{min-height:36px;cursor:pointer;font-weight:750;padding:.4rem 0}
+.shoe-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+.shoe-filter-grid label{display:grid;gap:.25rem;font-size:.85rem;font-weight:650}
+.shoe-filter-grid :is(input,select){padding:.5rem;min-height:44px;min-width:0;width:100%;border:1px solid #a9a29a;border-radius:.3rem;background:white;color:#222;font:inherit}
+.shoe-filter-grid button{align-self:end;justify-self:start}
+.shoe-card{min-width:0;position:relative;cursor:pointer}
+.shoe-card .card-img-wrap{position:relative;isolation:isolate}
+.shoe-card .card-img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;background:#f1efeb;mix-blend-mode:normal}
+.shoe-card .card-cat-badge{z-index:2}
+.shoe-card .card-title{margin:0}
+.shoe-card .card-title button{display:block;min-height:44px;color:inherit;background:none;border:0;padding:0;text-align:left;font:inherit;cursor:pointer}
+.shoe-card .card-meta{overflow-wrap:anywhere}
+.shoe-empty{position:absolute;inset:0;display:grid;place-items:center;color:#555;text-align:center;padding:.35rem;font-size:.78rem;pointer-events:none}
+.shoe-box{margin:.35rem 0 0;color:#484039;font-size:.77rem}
+.shoe-usa{background:#1a1a1a;color:#fff;margin:1.5rem auto;padding:clamp(1rem,4vw,2.4rem);max-width:1360px}
+.shoe-usa p{max-width:65ch;line-height:1.5}
+#modalBg .modal{max-width:min(940px,95vw);padding:clamp(1rem,3vw,2rem)}
+.shoe-product{display:grid;gap:1rem}
+.shoe-product>div{min-width:0}
+#modalBg .shoe-product #mIcon{width:100%;height:auto;display:block;background:none}
+.shoe-product h3{font-size:clamp(1.5rem,4vw,2.35rem);margin:0;padding-right:1.5rem}
+.shoe-product #mMeta{font-size:.9rem;margin:.35rem 0 .6rem}
+.shoe-no-image{display:grid;place-items:center;min-height:12rem;background:#ede9e4;color:#555}
+.shoe-zoom{width:100%;aspect-ratio:1.26;position:relative;display:grid;place-items:center;overflow:hidden;border:0;border-radius:.4rem;background:#eeeae6;padding:0;touch-action:pan-y;cursor:zoom-in}
+.shoe-zoom img{position:relative;object-fit:contain;width:100%;height:100%;max-height:50vh;transition:transform .2s}
+@media(hover:hover){.shoe-zoom:hover img{transform:scale(1.06)}}
+.shoe-thumbs{display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .2rem .2rem}
+.shoe-thumbs:empty{display:none}
+.shoe-thumbs button{flex:none;width:54px;height:54px;background:#eeeae6;border:1px solid #a9a29a;padding:2px;border-radius:.25rem;cursor:pointer}
+.shoe-thumbs button[aria-pressed=true]{border:2px solid #ae4a00}
+.shoe-thumbs img{width:100%;height:100%;object-fit:contain}
+.shoe-details{font-size:.89rem;line-height:1.45}
+.shoe-details p{margin:.6rem 0}
+.shoe-details details{border-top:1px solid #c9c2b9}
+.shoe-details a{color:#853400}
+#shoeWhatsApp{width:100%;margin-top:.6rem}
+#modalBg[data-shoe=true] :is(.modal-locals,#oldDirect){display:none}
+#shoeZoom{padding:.7rem;background:#f5f3ef;border:0;border-radius:.4rem;max-width:94vw;max-height:94vh}
+#shoeZoom::backdrop{background:#000d}
+#shoeZoom img{display:block;max-width:100%;max-height:79vh;object-fit:contain;margin:auto}
+#shoeZoom form{display:flex;justify-content:end;margin-bottom:.5rem}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid #b64a00;outline-offset:3px}
+:is(.shoe-hero,.shoe-usa) :focus-visible{outline-color:#ffd0a5}
+@media(min-width:760px){.shoe-hero{grid-template-columns:1fr 1fr}.shoe-filter-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.shoe-product{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr)}.shoe-feature-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:450px){#gridZapas{grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}.shoe-card .card-body{padding:.55rem}.shoe-card .card-title{font-size:.82rem}.shoe-card .card-cat-badge{font-size:.54rem;letter-spacing:0}}
+@media(prefers-reduced-motion:reduce){.shoe-zoom img{transition:none}}
+.shoe-size-table{border-collapse:collapse;width:100%;margin:.55rem 0}
+.shoe-size-table :is(th,td){text-align:left;padding:.35rem;border-bottom:1px solid #d5cec5}
+.shoe-card .card-img-wrap:has(img:not([hidden])) .shoe-empty,.shoe-zoom:has(img:not([hidden])) .shoe-empty,.shoe-hero-photo:has(img:not([hidden])) .shoe-empty{visibility:hidden}
+#modalBg .shoe-thumbs img{padding:0;mix-blend-mode:normal}
