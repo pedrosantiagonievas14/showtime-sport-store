@@ -134,8 +134,10 @@ function commerceReceipt_(p){
 }
 function commercePost_(e){
  try{
-  commerceEnabled_();if(!e.postData||e.postData.contents.length>2900000)throw new Error('Solicitud inválida.');
+  if(!e.postData||e.postData.contents.length>2900000)throw new Error('Solicitud inválida.');
   const p=JSON.parse(e.postData.contents);
+  if(p.action==='unsubscribe')return json_(ofertasUnsubscribe_(p));
+  commerceEnabled_();
   const actions={requestCode:commerceRequestCode_,verifyCode:commerceVerifyCode_,me:commerceMe_,preferences:commercePreferences_,createOrder:commerceCreateOrder_,receipt:commerceReceipt_,logout:q=>{commerceCustomer_(q.token);CacheService.getScriptCache().remove('customer:'+commerceHash_(q.token));return {ok:true};}};
   if(!Object.prototype.hasOwnProperty.call(actions,p.action))throw new Error('Acción inválida.');return json_(actions[p.action](p));
  }catch(error){return json_({ok:false,error:String(error.message||'No pudimos procesar la solicitud.').slice(0,250)});}
@@ -166,3 +168,4 @@ function commerceBook_(){const id=commerceProps_().getProperty("COMMERCE_SHEET_I
 function commerceOwner_(){const owner=Session.getEffectiveUser().getEmail();if(!owner||Session.getActiveUser().getEmail()!==owner)throw new Error("Esta operación se ejecuta únicamente desde el editor del propietario.");}
 function prepararComercio(){commerceOwner_();return locked_(()=>{const p=commerceProps_();if(!p.getProperty("COMMERCE_SHEET_ID")){const book=SpreadsheetApp.create("Showtime · Clientes y pedidos");p.setProperty("COMMERCE_SHEET_ID",book.getId());}const file=DriveApp.getFileById(p.getProperty("COMMERCE_SHEET_ID"));if(file.getSharingAccess()!==DriveApp.Access.PRIVATE)throw new Error("La base de clientes y pedidos debe ser privada.");if(!p.getProperty("RECEIPTS_FOLDER_ID")){const folder=DriveApp.createFolder("Showtime · Comprobantes privados");p.setProperty("RECEIPTS_FOLDER_ID",folder.getId());}const folder=DriveApp.getFolderById(p.getProperty("RECEIPTS_FOLDER_ID"));if(folder.getSharingAccess()!==DriveApp.Access.PRIVATE)throw new Error("La carpeta de comprobantes debe ser privada.");Object.keys(COMMERCE_TABLES).forEach(commerceSheet_);Logger.log("Base de pedidos y carpeta de comprobantes preparadas de forma privada.");});}
 function probarCorreoComercio(){commerceOwner_();const email=commerceEmail_(commerceProps_().getProperty("ORDERS_EMAIL"));MailApp.sendEmail({to:email,name:"Showtime Pedidos",subject:"Showtime · Prueba de avisos de pedidos",body:"Este mensaje confirma que la dirección del negocio puede recibir los avisos del sistema de pedidos. Es una prueba de configuración: no corresponde a una compra ni a un pago real."});Logger.log("Correo de prueba enviado al destinatario configurado.");}
+
