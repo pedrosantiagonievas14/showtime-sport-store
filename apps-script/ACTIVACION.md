@@ -36,7 +36,7 @@ function doPost(e) { return commercePost_(e); }
 7. Ejecutar `prepararComercio` desde el editor del propietario y autorizar los permisos de Google. Crea una planilla independiente y privada en `COMMERCE_SHEET_ID` y una carpeta privada de comprobantes; verifica su acceso antes de continuar. No guardar clientes en la planilla del catálogo. Ejecutar `probarCorreoComercio` y verificar la recepción en el correo del negocio. Verificar el cupo real con MailApp. El acceso por código falla de forma explícita si no hay cupo; el catálogo y el pedido por WhatsApp siguen disponibles.
 8. Desplegar una nueva versión de Apps Script conservando la URL existente. El panel de pedidos queda en `URL_EXEC?action=orders-admin`, con la misma contraseña de administración. No cambiar permisos de la planilla ni publicar hojas de clientes o pedidos.
 9. Verificar primero con datos de prueba: código recibido, cuenta correcta, pedido guardado una sola vez aun al reintentar, datos bancarios ocultos hasta separar, sucursal correcta, comprobante privado, cambios de estado y aislamiento entre dos cuentas.
-10. Habilitar `COMMERCE_ENABLED=true` solamente después de esas comprobaciones. Una sucursal sin alias no puede confirmar reservas para transferencia.
+10. Para probar, usar `COMMERCE_ENABLED=true` y `COMMERCE_PUBLIC_ENABLED=false`, y abrir la tienda con `?prueba_cuenta=1`. Después de verificar el recorrido, habilitar `COMMERCE_PUBLIC_ENABLED=true` para mostrar el registro y los pedidos a los visitantes. Una sucursal sin alias no puede confirmar reservas para transferencia.
 
 ## Avisos
 
@@ -46,6 +46,10 @@ El enlace de WhatsApp contiene número de pedido, productos, talles y sucursal; 
 
 ## Estado
 
-Código instalado en el editor del Apps Script existente, con las rutas de cuentas y panel de pedidos agregadas. Correo del negocio verificado y configurado como destinatario privado, junto con los datos de ambas sucursales. Google solicita autorización antes de ejecutar la preparación y el envío de prueba. La versión publicada y el frontend siguen sin activar este módulo. No activar publicidad, puntos ni mensajes masivos.
+Servidor desplegado en la versión 3 conservando la URL existente. Preparación privada ejecutada y permisos de Google autorizados. Correo del negocio verificado y configurado como destinatario privado, junto con los datos de ambas sucursales. Se detectaron los primeros mensajes automáticos en Spam y se marcaron como legítimos; una segunda prueba automática llegó a Recibidos. No se crearon pedidos ni se efectuaron transferencias durante las pruebas.
 
-Validación local: `node tests/commerce.test.cjs` cubre 16 casos de acceso, códigos de un solo uso, consentimiento, precios calculados por servidor, reintentos, aislamiento entre cuentas, estados, sucursales, comprobantes privados, base separada y controles de propietario. Las pruebas usan servicios simulados; faltan la validación con Google y la prueba visual en navegador. El navegador conectado no pudo acceder a la vista local de prueba.
+El frontend está integrado en el sitio con activación pública controlada. El estado real de activación es el de las propiedades privadas del servidor; este archivo no las sustituye. Las reglas de acumulación/canje de puntos y la frecuencia de promociones siguen pendientes de definición. No hay campañas automáticas activas.
+
+Validación local: `node tests/commerce.test.cjs` cubre 17 casos de acceso, códigos de un solo uso, consentimiento, precios calculados por servidor, reintentos, aislamiento entre cuentas, estados, sucursales, comprobantes privados, base separada, controles de propietario y activación pública. Las pruebas usan servicios simulados.
+
+Validación real en Chrome: catálogo público con 121 productos locales y 84 zapatillas, sin hojas privadas en la respuesta; recepción de código e ingreso correcto; historial privado vacío; agregado y retiro del producto de prueba del carrito; pantalla de reserva con selección de ambas sucursales; aviso de no transferir antes de la confirmación del local. Se corrigió el centrado del cartel tras inspección visual. La verificación bancaria y la separación física de mercadería son tareas del personal; no se simularon cobros ni reservas reales.
