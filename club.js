@@ -72,7 +72,7 @@
  }
  async function init(){
   if(!API)return;
-  try{const response=await fetch(API+'?action=commerce',{credentials:'omit'});config=await response.json();if(config.version!==1||!config.enabled)return;}catch(e){return;}
+  try{const response=await fetch(API+'?action=commerce',{credentials:'omit'});config=await response.json();if(config.version!==1||(!config.enabled&&!(config.testing&&new URLSearchParams(location.search).get('prueba_cuenta')==='1')))return;}catch(e){return;}
   const dialog=document.createElement('dialog');dialog.id='clubDialog';dialog.className='club-dialog';dialog.setAttribute('aria-labelledby','clubTitle');dialog.innerHTML='<button type="button" class="club-close" aria-label="Cerrar">✕</button><p class="club-brand">SHOWTIME SPORT STORE</p><h2 id="clubTitle"></h2><div id="clubBody"></div><p id="clubStatus" role="status" aria-live="polite"></p>';
   document.body.appendChild(dialog);dialog.querySelector('.club-close').onclick=close;dialog.addEventListener('cancel',e=>{e.preventDefault();close();});dialog.addEventListener('click',e=>{const r=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))close();});
   const button=document.createElement('button');button.id='clubOpen';button.type='button';button.className='club-open';button.textContent='Mi cuenta';button.onclick=()=>open();$('cartOpen').insertAdjacentElement('beforebegin',button);

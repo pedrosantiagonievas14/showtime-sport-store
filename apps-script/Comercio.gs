@@ -32,7 +32,7 @@ function commerceBranches_(){
  return [{id:'brown',name:'Brown 153',phone:p.getProperty('CONTACT_BROWN_WA')||'',holder:p.getProperty('TRANSFER_BROWN_HOLDER')||'',alias:p.getProperty('TRANSFER_BROWN_ALIAS')||''},
  {id:'vm',name:'Garibaldi 243',phone:p.getProperty('CONTACT_VM_WA')||'',holder:p.getProperty('TRANSFER_VM_HOLDER')||'',alias:p.getProperty('TRANSFER_VM_ALIAS')||''}];
 }
-function commercePublic_(){const branches=commerceBranches_();return {ok:true,version:1,enabled:commerceProps_().getProperty('COMMERCE_ENABLED')==='true'&&branches.every(b=>/^549\d{10}$/.test(b.phone)),branches:branches.map(b=>({id:b.id,name:b.name,phone:b.phone,transferAvailable:!!(b.alias&&b.holder)}))};}
+function commercePublic_(){const branches=commerceBranches_(),ready=commerceProps_().getProperty('COMMERCE_ENABLED')==='true'&&branches.every(b=>/^549\d{10}$/.test(b.phone));return {ok:true,version:1,enabled:ready&&commerceProps_().getProperty('COMMERCE_PUBLIC_ENABLED')==='true',testing:ready,branches:branches.map(b=>({id:b.id,name:b.name,phone:b.phone,transferAvailable:!!(b.alias&&b.holder)}))};}
 function commerceThrottle_(key,max,seconds){const cache=CacheService.getScriptCache(),n=Number(cache.get(key)||0);if(n>=max)throw new Error('Alcanzaste el límite de intentos. Probá más tarde.');cache.put(key,String(n+1),seconds);}
 function commerceRequestCode_(p){
  const email=commerceEmail_(p.email),name=commerceText_(p.name,2,80,'tu nombre'),phone=String(p.phone||'').replace(/[\s()+-]/g,'');
