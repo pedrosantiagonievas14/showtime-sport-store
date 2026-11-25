@@ -8,7 +8,7 @@ function commerceProps_(){return PropertiesService.getScriptProperties();}
 function commerceEnabled_(){if(commerceProps_().getProperty('COMMERCE_ENABLED')!=='true')throw new Error('Los pedidos online todavía no están habilitados. Podés consultar por WhatsApp.');}
 function commerceSheet_(name){
  if(!Object.prototype.hasOwnProperty.call(COMMERCE_TABLES,name))throw new Error('Tabla inválida.');
- const book=db_(),fields=COMMERCE_TABLES[name];let sheet=book.getSheetByName(name);
+ const book=commerceBook_(),fields=COMMERCE_TABLES[name];let sheet=book.getSheetByName(name);
  if(!sheet){sheet=book.insertSheet(name);sheet.getRange(1,1,1,fields.length).setValues([fields]);sheet.setFrozenRows(1);}
  if(sheet.getRange(1,1,1,fields.length).getValues()[0].join('|')!==fields.join('|'))throw new Error('Revisar columnas de '+name+'.');
  return sheet;
@@ -162,3 +162,7 @@ function pedidosAdminUpdate(token,p){
   commerceWrite_('PEDIDOS_WEB',patch,order.row);commerceWrite_('AUDITORIA_PEDIDOS',{Pedido_ID:order.ID,Desde:order.Estado,Hasta:p.status,Fecha:patch.Actualizado_En,Operador:'administración'});return patch;
  });return {ok:true,order:commerceOrderView_(updated)};
 }
+function commerceBook_(){const id=commerceProps_().getProperty("COMMERCE_SHEET_ID");if(!id)throw new Error("Falta preparar la base privada de pedidos.");return SpreadsheetApp.openById(id);}
+function commerceOwner_(){const owner=Session.getEffectiveUser().getEmail();if(!owner||Session.getActiveUser().getEmail()!==owner)throw new Error("Esta operación se ejecuta únicamente desde el editor del propietario.");}
+function prepararComercio(){commerceOwner_();return locked_(()=>{const p=commerceProps_();if(!p.getProperty("COMMERCE_SHEET_ID")){const book=SpreadsheetApp.create("Showtime · Clientes y pedidos");p.setProperty("COMMERCE_SHEET_ID",book.getId());}const file=DriveApp.getFileById(p.getProperty("COMMERCE_SHEET_ID"));if(file.getSharingAccess()!==DriveApp.Access.PRIVATE)throw new Error("La base de clientes y pedidos debe ser privada.");if(!p.getProperty("RECEIPTS_FOLDER_ID")){const folder=DriveApp.createFolder("Showtime · Comprobantes privados");p.setProperty("RECEIPTS_FOLDER_ID",folder.getId());}const folder=DriveApp.getFolderById(p.getProperty("RECEIPTS_FOLDER_ID"));if(folder.getSharingAccess()!==DriveApp.Access.PRIVATE)throw new Error("La carpeta de comprobantes debe ser privada.");Object.keys(COMMERCE_TABLES).forEach(commerceSheet_);Logger.log("Base de pedidos y carpeta de comprobantes preparadas de forma privada.");});}
+function probarCorreoComercio(){commerceOwner_();const email=commerceEmail_(commerceProps_().getProperty("ORDERS_EMAIL"));MailApp.sendEmail({to:email,name:"Showtime Pedidos",subject:"Showtime · Prueba de avisos de pedidos",body:"Este mensaje confirma que la dirección del negocio puede recibir los avisos del sistema de pedidos. Es una prueba de configuración: no corresponde a una compra ni a un pago real."});Logger.log("Correo de prueba enviado al destinatario configurado.");}
